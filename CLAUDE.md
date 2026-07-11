@@ -165,10 +165,13 @@ Page section order (from `src/pages/index.astro`), top to bottom:
    India's land is riverfront."
 4. **UspGrid** — 3 stat cards (20 plots / freehold / private access), 2-up grid,
    odd card spans full width.
-5. **LocationConnectivity** (`#location`) — now the merged location section:
-   road image banner → address copy → 4 connectivity stat tiles (beaches/fort/
-   airport/Goa) → a tappable location **map** (`mode="contain"`, opens in the
-   shared lightbox) → an 8-item checkmark list of nearby highlights. See below.
+5. **LocationConnectivity** (`#location`) — the merged location section:
+   road image banner → address copy → "Key Distances" 4-tile stat grid
+   (beaches/fort/airport/Goa) → a **full-bleed, edge-to-edge map** with a
+   "Tap to expand" badge (opens the shared lightbox, pinch-zoomable) →
+   "Beaches Near the Site" checklist (7 beaches, names only) → a second
+   checklist (Kudal Railway Station). See below — this was reworked twice;
+   the current shape is the result of a follow-up fix, not the original.
 6. **WaterfrontPremium** — +15/25/40% stat cards + sourcing disclaimer.
 7. **GrowthThesis** (`#growth`) — infographic banner (`contain` mode, see §9) +
    5 infrastructure stat cards.
@@ -355,7 +358,15 @@ modal.
 - Closes via the X button, `Escape` key, or tapping the scrim (not the image
   itself).
 - Keyboard `ArrowLeft`/`ArrowRight` navigate; native touch swipe (40px threshold,
-  `SWIPE_THRESHOLD_PX` in `lightbox.js`) on the stage.
+  `SWIPE_THRESHOLD_PX` in `lightbox.js`) on the stage — swipe-to-navigate only
+  fires when the active image is at `scale === 1` (not zoomed).
+- **Pinch-to-zoom + pan**, added specifically to make the location map's labels
+  actually readable. Two-finger touch computes a distance ratio → CSS `transform:
+  scale()` on the active slide's `<img>` (clamped 1–`MAX_ZOOM`, currently 4);
+  single-finger drag pans via `translate()` once `scale > 1`; double-tap toggles
+  to 2×. Zoom/pan resets on slide change and on close. `.lightbox__stage` has
+  `touch-action: none` so the browser's native pinch/scroll doesn't fight the
+  custom handlers. This logic lives entirely in `lightbox.js` — no library.
 - Slide switching is a simple `display: none` ↔ `.is-active` toggle per slide —
   **not** a sliding/transform-based track. This was a deliberate choice after the
   carousel's transform-based approach broke (see §9) — toggling display is
@@ -365,23 +376,43 @@ modal.
   under `prefers-reduced-motion: reduce` (slide switching itself was already
   instant, so "instant transitions" was true by construction, not extra work).
 
-### The merged location + map section
+### The location + map section (reworked twice — this is the current shape)
 
-`LocationConnectivity.astro` (`#location`) now holds, in order: road-image banner
-→ "On NH-66..." heading/body → the existing 4-tile connectivity stat grid
-(Beaches 25 min / Sindhudurg Fort 40 min / Airport 50 min / Goa next door) → a
-hairline divider → a tappable map (`ImageFrame mode="contain"`, cream background,
-never cropped, opens lightbox index 9) → an 8-item checkmark list of nearby
-highlights (`.check-list`):
+`LocationConnectivity.astro` (`#location`) holds, in order: road-image banner →
+"On NH-66..." heading/body → **"Key Distances"** stat grid (Beaches 25 min /
+Sindhudurg Fort 40 min / Airport 50 min / Goa next door — the only 4 figures
+that exist in `docs/brand-guidelines.md`) → a **full-bleed map** → **"Beaches
+Near the Site"** checklist (7 beaches, names only) → a second checklist
+(Kudal Railway Station, name only).
 
-Munage Beach · Achara Beach · Tondavali Beach · Malvan Beach · Tarkarli Beach ·
-Sindhudurg Fort (40 min) · Kudal Railway Station · Airport (50 min).
+**The map was originally shown small and inset (contained inside
+`.section-inner`'s 560px max-width) and was reported illegible.** It's now:
+- Rendered as a direct child of `<section>`, broken out of the section's own
+  horizontal padding via negative margins (`.map-trigger`: `width: calc(100% +
+  section-pad-x * 2)`, matching negative `margin-left`/`margin-right`) — true
+  edge-to-edge on mobile, not just "full width of the padded content column."
+- Given its own `ImageFrame` ratio, `5/3` (added to `ImageFrame`'s ratio union
+  specifically for this — it's the map's *exact* source aspect ratio, 2300×1380,
+  so `mode="contain"` has zero wasted letterbox space, unlike the closest
+  existing option `16/9`).
+- Given a visible `.map-trigger__badge` overlay ("Tap to expand" + a magnifier
+  icon, bottom-right) so it reads as tappable, not just a static image.
+- Tapping it opens lightbox index 9 same as before, but the lightbox itself now
+  supports **pinch-zoom + pan** (see below) specifically so the map's labels
+  are actually readable once expanded.
 
-Only Sindhudurg Fort and Airport carry a time — those are the only two names in
-this list that match an exact entry in `docs/brand-guidelines.md`. The five named
-beaches and Kudal Railway Station intentionally have **no** time next to them; the
-guidelines only give a generic "Beaches: 25 min" bucket, not a per-beach figure,
-and no invented number was added.
+**The nearby-highlights list was split and re-scoped.** Previously one 8-item
+list mixed beaches + Fort + Kudal + Airport, with Fort/Airport carrying times
+that duplicated the stat grid above. Now: Fort and Airport times live *only* in
+the "Key Distances" stat grid; the beach checklist is beaches-only (7 names, no
+times — 2 more beaches, Bhogwe and Vengurla, were added and none of the 7 carry
+an invented time); a separate one-item checklist holds Kudal Railway Station.
+
+**Data shape, kept intentionally simple for a later drop-in:** both
+`nearbyBeaches` and `otherNearby` in `LocationConnectivity.astro` are
+`{ name: string; time?: string }[]`. The template already renders `{h.time &&
+<span>...}` conditionally — adding a real per-beach time later is a one-line
+data edit, no template/CSS changes needed.
 
 ### Gated downloads
 
@@ -416,15 +447,21 @@ Note: the lightbox itself always uses `object-fit: contain` for every slide
 same photo is cropped in its grid tile. The `focal` values above only govern the
 grid-tile crop.
 
-### Current metrics (last verified against a clean `astro preview` production build)
+### Current metrics (last full Lighthouse run — see caveat below)
 
 - **Lighthouse mobile performance: 100/100**
 - **Page payload: ~227 KiB over 14 requests**
 - **CLS: ~0.0001**
 
-These numbers will drift as content/sections change — re-run Lighthouse against
-`astro preview` (never `astro dev`) after any non-trivial change; see the gotcha
-in §9.
+These are from the logo-integration pass, *before* the location/map rework
+(full-bleed map, pinch-zoom JS). The map-fix task was explicitly a "front-end
+only, build-must-pass, no full audit" pass — `npm run build` was confirmed
+green and the map/lightbox/distance-data were spot-checked with Puppeteer, but
+**Lighthouse was not re-run**. Re-run it before trusting these numbers as
+current — the new pinch-zoom touch handlers and full-bleed map are unlikely to
+regress performance (still no libraries, same image), but that's an assumption,
+not a measurement. Always re-run against `astro preview` (never `astro dev`);
+see the gotcha in §9.
 
 ## 5. HARD CONSTRAINTS (never violate)
 
