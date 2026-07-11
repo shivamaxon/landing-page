@@ -1,0 +1,37 @@
+---
+const tiers = [
+  { value: '+15%', label: 'Conservative', desc: 'Minimum premium seen over comparable inland land.' },
+  { value: '+25%', label: 'Typical', desc: 'The premium waterfront land typically commands.' },
+  { value: '+40%', label: 'Exceptional', desc: 'Achieved by the rarest, best-positioned waterfront parcels.' },
+];
+---
+
+<section class="section section--teal">
+  <div class="section-inner">
+    <p class="eyebrow reveal">The Waterfront Premium</p>
+    <h2 class="section-title reveal">Waterfront Consistently Commands More</h2>
+    <div class="stat-grid">
+      {
+        tiers.map((t, i) => (
+          <div
+            class:list={[
+              'stat-card',
+              'reveal',
+              `reveal-delay-${Math.min(i + 1, 3)}`,
+              { 'span-all': i === tiers.length - 1 && tiers.length % 2 !== 0 },
+            ]}
+          >
+            <div class="stat-card__value">{t.value}</div>
+            <div class="stat-card__label">{t.label}</div>
+            <div class="stat-card__desc">{t.desc}</div>
+          </div>
+        ))
+      }
+    </div>
+    <p class="disclaimer reveal">
+      Indicative of the category, not a guarantee. Based on Market reports
+      2025–26, Square Yards, and SRFDCL/GharPe data on comparable waterfront
+      vs. inland land.
+    </p>
+  </div>
+</section>

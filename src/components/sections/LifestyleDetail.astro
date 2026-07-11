@@ -1,0 +1,46 @@
+---
+const details = [
+  {
+    value: 'Private',
+    label: 'Boat Access',
+    desc: 'Step from your plot directly onto the river — private boat access for every villa.',
+  },
+  {
+    value: 'Balinese',
+    label: 'Tropical Architecture',
+    desc: 'Villas designed around open, tropical Balinese architecture suited to the Konkan climate.',
+  },
+  {
+    value: 'Year-Round',
+    label: 'Konkan Excursions',
+    desc: 'Beaches, forts, and the river itself — a destination to return to through every season.',
+  },
+];
+---
+
+<section class="section section--cream">
+  <div class="section-inner">
+    <p class="eyebrow reveal">The Lifestyle, In Detail</p>
+    <h2 class="section-title reveal">Living On the Water, Not Just Near It</h2>
+    <div class="stat-grid">
+      {
+        details.map((d, i) => (
+          <div
+            class:list={[
+              'stat-card',
+              'reveal',
+              `reveal-delay-${Math.min(i + 1, 3)}`,
+              { 'span-all': i === details.length - 1 && details.length % 2 !== 0 },
+            ]}
+          >
+            <div class="stat-card__value" style="font-size: clamp(1.05rem, 5vw, 1.3rem);">
+              {d.value}
+            </div>
+            <div class="stat-card__label">{d.label}</div>
+            <div class="stat-card__desc">{d.desc}</div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

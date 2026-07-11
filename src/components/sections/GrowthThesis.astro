@@ -1,0 +1,47 @@
+---
+import ImageFrame from '../ImageFrame.astro';
+import growthImage from '../../assets/images/4.png';
+
+const infra = [
+  { value: '₹68,720 Cr', label: 'Coastal highway' },
+  { value: '₹7,851 Cr', label: 'Bridge project' },
+  { value: '18h → 7–8h', label: 'Shaktipeeth expressway, Nagpur–Goa, by 2028–29' },
+  { value: '₹2,000 Cr', label: 'Film city' },
+  { value: '₹46.9 Cr', label: 'Underwater museum & scuba centre' },
+];
+---
+
+<section class="section section--forest" id="growth">
+  <ImageFrame
+    src={growthImage}
+    alt="Upcoming infrastructure projects in Sindhudurg"
+    ratio="21/9"
+    mode="contain"
+    class="reveal"
+  />
+  <div class="section-inner" style="margin-top: 1rem;">
+    <p class="eyebrow reveal">Why Now, Why Here</p>
+    <h2 class="section-title reveal">Sindhudurg Is Being Built For What's Next</h2>
+    <p class="section-body reveal reveal-delay-1">
+      Land value moves ahead of infrastructure. Sindhudurg is at the point
+      where major, already-sanctioned projects are underway.
+    </p>
+    <div class="stat-grid">
+      {
+        infra.map((item, i) => (
+          <div
+            class:list={[
+              'stat-card',
+              'reveal',
+              `reveal-delay-${Math.min(i + 1, 3)}`,
+              { 'span-all': i === infra.length - 1 && infra.length % 2 !== 0 },
+            ]}
+          >
+            <div class="stat-card__value">{item.value}</div>
+            <div class="stat-card__label">{item.label}</div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

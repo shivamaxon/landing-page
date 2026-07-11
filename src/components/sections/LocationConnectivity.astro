@@ -1,0 +1,123 @@
+---
+import ImageFrame from '../ImageFrame.astro';
+import roadImage from '../../assets/images/road to location.png';
+import mapImage from '../../assets/images/Beaches from site (on India\'s Map).png';
+
+// Key distances — every figure here comes straight from brand-guidelines.md.
+const keyDistances = [
+  { name: 'Beaches', time: '25 min' },
+  { name: 'Sindhudurg Fort', time: '40 min' },
+  { name: 'Airport', time: '50 min' },
+  { name: 'Goa', time: 'Next door' },
+];
+
+// Nearby beaches — names only. brand-guidelines.md has no per-beach drive
+// time (only the generic "Beaches: 25 min" bucket above), so `time` stays
+// undefined here. Each item supports an optional `time` field — drop a real
+// value in per-beach later and the checklist will render it automatically,
+// no template changes needed.
+const nearbyBeaches: { name: string; time?: string }[] = [
+  { name: 'Munage Beach' },
+  { name: 'Achara Beach' },
+  { name: 'Tondavali Beach' },
+  { name: 'Malvan Beach' },
+  { name: 'Tarkarli Beach' },
+  { name: 'Bhogwe Beach' },
+  { name: 'Vengurla Beach' },
+];
+
+// Other nearby points — same optional-time shape as nearbyBeaches.
+const otherNearby: { name: string; time?: string }[] = [{ name: 'Kudal Railway Station' }];
+
+// Lightbox index 9 — the map is appended after the 9 gallery images in
+// Lightbox.astro. Keep in sync if that array's composition changes.
+const MAP_LIGHTBOX_INDEX = 9;
+---
+
+<section class="section section--cream-cool" id="location">
+  <ImageFrame
+    src={roadImage}
+    alt="Road connecting to the project location"
+    ratio="16/9"
+    focal="center 58%"
+    class="reveal"
+  />
+  <div class="section-inner" style="margin-top: 1rem;">
+    <p class="eyebrow reveal">The Address</p>
+    <h2 class="section-title reveal">On NH-66, the Mumbai–Goa Corridor</h2>
+    <p class="section-body reveal reveal-delay-1">
+      Positioned in Konkan, Sindhudurg, beside the Gad River — connected
+      directly to the coastal highway that links Mumbai to Goa.
+    </p>
+
+    <p class="eyebrow reveal" style="margin-top: 1.25rem;">Key Distances</p>
+    <div class="stat-grid">
+      {
+        keyDistances.map((s, i) => (
+          <div class={`stat-card reveal reveal-delay-${Math.min(i + 1, 3)}`}>
+            <div class="stat-card__value">{s.time}</div>
+            <div class="stat-card__label">{s.name}</div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <p class="eyebrow reveal map-section-label">On the Map</p>
+  <button
+    type="button"
+    data-lightbox-trigger
+    data-lightbox-index={MAP_LIGHTBOX_INDEX}
+    aria-label="Tap to expand: location map with nearby beaches and connectivity"
+    class="map-trigger reveal"
+  >
+    <ImageFrame
+      src={mapImage}
+      alt="Map showing The Riviera's location with nearby beaches, Kudal Railway Station, the airport, and the NH-66 route"
+      ratio="5/3"
+      mode="contain"
+      widths={[400, 800, 1200, 1600]}
+    />
+    <span class="map-trigger__badge">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+        <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+      Tap to expand
+    </span>
+  </button>
+
+  <div class="section-inner">
+    <p class="section-body reveal" style="margin-top: 1.25rem;">
+      All within easy reach of the site.
+    </p>
+    <p class="eyebrow reveal" style="margin-top: 1rem;">Beaches Near the Site</p>
+    <ul class="check-list reveal">
+      {
+        nearbyBeaches.map((b) => (
+          <li class="check-list__item">
+            <span class="check-list__icon" aria-hidden="true">
+              &#10003;
+            </span>
+            <span>{b.name}</span>
+            {b.time && <span class="check-list__time">{b.time}</span>}
+          </li>
+        ))
+      }
+    </ul>
+
+    <ul class="check-list reveal" style="margin-top: 0.75rem;">
+      {
+        otherNearby.map((n) => (
+          <li class="check-list__item">
+            <span class="check-list__icon" aria-hidden="true">
+              &#10003;
+            </span>
+            <span>{n.name}</span>
+            {n.time && <span class="check-list__time">{n.time}</span>}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

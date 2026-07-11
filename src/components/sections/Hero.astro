@@ -1,0 +1,130 @@
+---
+import { Picture } from 'astro:assets';
+import heroImage from '../../assets/images/Gad river view drone shot.jpg';
+---
+
+<section class="hero" id="home">
+  <Picture
+    src={heroImage}
+    alt="Aerial drone view of the Gad River"
+    widths={[400, 800, 1200, 1920]}
+    sizes="100vw"
+    formats={['avif', 'webp']}
+    fallbackFormat="webp"
+    loading="eager"
+    fetchpriority="high"
+    decoding="sync"
+    class="hero__image"
+  />
+  <div class="hero__overlay"></div>
+  <div class="hero__content">
+    <h1 class="hero__title">The Riviera</h1>
+    <p class="hero__tagline">India's Rarest Riverfront Address.</p>
+    <div class="hero__actions">
+      <button type="button" class="btn btn-primary" data-gate-trigger data-intent="enquiry">
+        Enquire Now
+      </button>
+      <a href="#scarcity" class="btn btn-outline">
+        Discover More
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+
+  .hero__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    animation: hero-zoom 20s ease-out forwards;
+  }
+
+  @keyframes hero-zoom {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.08);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__image {
+      animation: none;
+    }
+  }
+
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(22, 158, 170, 0.5) 0%,
+      rgba(10, 110, 133, 0.7) 55%,
+      rgba(4, 45, 47, 0.92) 100%
+    );
+    z-index: 1;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 2rem 1.5rem 4.5rem;
+    text-align: center;
+  }
+
+  .hero__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: clamp(2.5rem, 10vw, 4.5rem);
+    color: var(--text-on-dark);
+    line-height: 1.05;
+  }
+
+  .hero__tagline {
+    margin-top: 0.75rem;
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(1rem, 4vw, 1.25rem);
+    color: var(--text-on-dark);
+  }
+
+  .hero__actions {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .hero__actions .btn {
+    width: 100%;
+    max-width: 260px;
+    color: var(--text-on-dark);
+  }
+
+  @media (min-width: 480px) {
+    .hero__actions {
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    .hero__actions .btn {
+      width: auto;
+    }
+  }
+</style>

@@ -1,0 +1,75 @@
+---
+import Logo from './Logo.astro';
+import { countryCodes } from '../data/country-codes.js';
+---
+
+<div id="leadModal" class="lead-modal" aria-hidden="true">
+  <div class="lead-modal__backdrop" data-modal-close></div>
+  <div class="lead-modal__card" role="dialog" aria-modal="true" aria-labelledby="leadModalHeading">
+    <button type="button" class="lead-modal__close" data-modal-close aria-label="Close">&times;</button>
+
+    <div class="lead-modal__logo">
+      <Logo width={170} variant="dark" />
+    </div>
+    <h2 id="leadModalHeading" class="lead-modal__heading">Get the Details</h2>
+
+    <div class="form-fields">
+      <form id="leadModalForm" novalidate>
+        <input type="hidden" name="intent" id="leadIntent" value="enquiry" />
+
+        <div class="form-field" data-field="name">
+          <label for="leadName">Name</label>
+          <input type="text" id="leadName" name="name" autocomplete="name" required minlength="2" />
+          <span class="form-field__error">Please enter your name (min 2 characters).</span>
+        </div>
+
+        <div class="form-field" data-field="email">
+          <label for="leadEmail">Email</label>
+          <input type="email" id="leadEmail" name="email" autocomplete="email" required />
+          <span class="form-field__error">Please enter a valid email address.</span>
+        </div>
+
+        <div class="form-row form-row--split">
+          <div class="form-field" data-field="countryCode">
+            <label for="leadCountryCode">Code</label>
+            <select id="leadCountryCode" name="countryCode" autocomplete="tel-country-code">
+              {countryCodes.map((c) => <option value={c.dial} selected={c.name === 'India'}>{c.dial} {c.name}</option>)}
+            </select>
+          </div>
+          <div class="form-field" data-field="phone">
+            <label for="leadPhone">Phone Number</label>
+            <input type="tel" id="leadPhone" name="phone" autocomplete="tel-national" inputmode="numeric" required />
+            <span class="form-field__error">Enter a valid phone number (7–15 digits).</span>
+          </div>
+        </div>
+
+        <label class="form-consent">
+          <input type="checkbox" id="leadConsent" name="consent" required />
+          <span>
+            I authorise Axon Developers &amp; its representatives to contact me with
+            updates and notifications via Email/SMS/WhatsApp/Call. This will override
+            DND/NDNC.
+          </span>
+        </label>
+
+        <div class="form-submit-wrap">
+          <button type="submit" class="btn btn-primary form-submit" id="leadSubmit" disabled>
+            Submit
+          </button>
+        </div>
+      </form>
+
+      <p class="form-disclaimer">
+        This is not an offer to sell. Please verify all details independently before
+        making any purchase decision.
+      </p>
+    </div>
+
+    <div class="form-success">
+      <p style="font-weight: 700; font-size: 1.1rem;">Thank you.</p>
+      <p class="section-body" style="margin-top: 0.5rem;">
+        Our team will reach out to you shortly with details on The Riviera.
+      </p>
+    </div>
+  </div>
+</div>

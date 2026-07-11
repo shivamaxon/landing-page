@@ -1,0 +1,38 @@
+---
+interface Props {
+  label: string;
+  aspectRatio?: string;
+}
+
+const { label, aspectRatio = '16 / 9' } = Astro.props;
+---
+
+<div class="placeholder" style={`aspect-ratio: ${aspectRatio};`}>
+  <span>{label}<br /><small>pending asset</small></span>
+</div>
+
+<style>
+  .placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background: var(--brand-cream);
+    border: 2px dashed var(--hairline);
+    color: var(--text-on-light);
+    text-align: center;
+    font-family: var(--font-body);
+    padding: 1rem;
+  }
+
+  .placeholder span {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .placeholder small {
+    font-weight: 400;
+    opacity: 0.6;
+  }
+</style>

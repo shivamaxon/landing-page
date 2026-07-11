@@ -1,0 +1,25 @@
+---
+import Logo from './Logo.astro';
+---
+
+<header class="site-header">
+  <div class="site-header__logo">
+    <Logo width={100} variant="light" />
+  </div>
+  <button id="navToggle" class="site-header__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</header>
+
+<nav id="siteNav" class="site-nav">
+  <a href="#scarcity">Overview</a>
+  <a href="#location">Location</a>
+  <a href="#growth">Growth Story</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#site-plan">Site Plan</a>
+  <button type="button" class="btn btn-primary" data-gate-trigger data-intent="enquiry">
+    Enquire Now
+  </button>
+</nav>

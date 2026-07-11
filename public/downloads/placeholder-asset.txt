@@ -1,0 +1,8 @@
+The Riviera — placeholder asset
+
+This is a stand-in file for the gated brochure / site plan / floor plan.
+
+The real, final assets will be served from a signed, expiring URL generated
+by the backend once a lead is captured, so they cannot be reached by
+guessing a public path. This placeholder exists only to prove the
+auto-download mechanism works end to end.

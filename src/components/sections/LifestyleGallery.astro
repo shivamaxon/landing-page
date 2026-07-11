@@ -1,0 +1,26 @@
+---
+import ImageFrame from '../ImageFrame.astro';
+import { galleryImages } from '../../data/gallery-images.js';
+---
+
+<section class="section section--cream-cool" id="gallery">
+  <div class="section-inner">
+    <p class="eyebrow reveal">The Lifestyle</p>
+    <h2 class="section-title reveal">Everyday Life, Riverfront</h2>
+  </div>
+  <div class="gallery-grid">
+    {
+      galleryImages.map((img, i) => (
+        <button
+          type="button"
+          data-lightbox-trigger
+          data-lightbox-index={i}
+          aria-label={`View larger: ${img.alt}`}
+          class={`reveal reveal-delay-${Math.min((i % 3) + 1, 3)}`}
+        >
+          <ImageFrame src={img.src} alt={img.alt} ratio="1/1" focal={img.focal} />
+        </button>
+      ))
+    }
+  </div>
+</section>

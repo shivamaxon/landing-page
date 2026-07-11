@@ -1,0 +1,45 @@
+---
+import { Picture } from 'astro:assets';
+import { galleryImages } from '../data/gallery-images.js';
+import mapImage from '../assets/images/Beaches from site (on India\'s Map).png';
+
+// Index 9 is the location map — LocationConnectivity.astro references it via a
+// hardcoded data-lightbox-index={9}, documented there, since it's appended
+// after the 9 shared gallery images (indices 0–8).
+const items = [
+  ...galleryImages,
+  {
+    src: mapImage,
+    alt: "Map showing The Riviera's location with nearby beaches, Kudal Railway Station, the airport, and the NH-66 route",
+  },
+];
+---
+
+<div id="lightbox" class="lightbox" aria-hidden="true">
+  <div class="lightbox__scrim" data-lightbox-close></div>
+  <button type="button" class="lightbox__close" data-lightbox-close aria-label="Close">&times;</button>
+  <button type="button" class="lightbox__arrow lightbox__arrow--prev" data-lightbox-prev aria-label="Previous image">
+    &#8249;
+  </button>
+  <div class="lightbox__stage">
+    {
+      items.map((item, i) => (
+        <div class="lightbox__slide" data-lightbox-slide data-index={i}>
+          <Picture
+            src={item.src}
+            alt={item.alt}
+            widths={[800, 1200, 1600]}
+            sizes="100vw"
+            formats={['avif', 'webp']}
+            fallbackFormat="webp"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      ))
+    }
+  </div>
+  <button type="button" class="lightbox__arrow lightbox__arrow--next" data-lightbox-next aria-label="Next image">
+    &#8250;
+  </button>
+</div>

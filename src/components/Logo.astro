@@ -1,0 +1,19 @@
+---
+import { Image } from 'astro:assets';
+import logoLight from '../assets/images/logo.png';
+import logoDark from '../assets/images/logo-dark.png';
+
+interface Props {
+  width?: number;
+  variant?: 'light' | 'dark';
+  class?: string;
+}
+
+const { width = 140, variant = 'light', class: className } = Astro.props;
+const src = variant === 'dark' ? logoDark : logoLight;
+---
+
+{/* Request a higher-resolution source than the CSS display size so the
+    logo stays crisp at 2x/3x device pixel ratios — the container's own
+    CSS (width: 100%; height: auto) scales it back down. */}
+<Image src={src} alt="The Riviera" width={width * 3} class={className} />
