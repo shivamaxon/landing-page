@@ -1,0 +1,112 @@
+---
+// Folds the previous standalone "Only 1% of India's land is riverfront"
+// scarcity statement into this section's lead-in (that stat is USP #1 in
+// docs/brand-guidelines.md) — the marketing-supplied flow for this pass
+// lists this as the second section overall with no separate scarcity
+// section, so the two are merged rather than dropping the stat entirely.
+//
+// Design-review pass: the scarcity line and the 20-plots line used to be
+// two same-weight headlines stacked back to back, competing for attention.
+// Now the scarcity line is a small lead-in statement and the 20-plots line
+// is the section's one dominant headline.
+const facts = [
+  { value: '20', label: 'River-Touching Villa Plots' },
+  { value: 'OC Applied', label: 'Status' },
+  { value: 'Private', label: 'River Access & Views' },
+];
+---
+
+<section class="section section--forest-deep" id="overview">
+  <div class="section-inner" style="text-align: center;">
+    <p class="eyebrow reveal">Riviera Overview</p>
+    <p class="overview-lead-in reveal">
+      Only <em>1%</em> of India's land is riverfront.
+    </p>
+    <h2 class="section-title reveal reveal-delay-1 overview-headline">
+      20 Exclusive River-Touching Plots. That's All There Ever Will Be.
+    </h2>
+    <p class="section-body reveal reveal-delay-2 overview-body">
+      Rivers belong to everyone. Riverfront doesn't. Shoreline is finite,
+      regulations are tighter, and no one is creating more riverfront land.
+      These 20 plots are among the last opportunities to own an
+      uninterrupted stretch of river.
+    </p>
+
+    <div class="stat-grid overview-facts">
+      {
+        facts.map((f, i) => (
+          <div class={`stat-card overview-fact-card reveal reveal-delay-${Math.min(i + 1, 3)}`}>
+            <div class="stat-card__value overview-fact-value">{f.value}</div>
+            <div class="stat-card__label overview-fact-label">{f.label}</div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Small, quiet lead-in — no longer competing with the main headline for
+     visual weight. */
+  .overview-lead-in {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: clamp(0.95rem, 3.2vw, 1.15rem);
+    opacity: 0.85;
+  }
+
+  .overview-lead-in em {
+    font-style: normal;
+    color: var(--brand-aqua-light);
+  }
+
+  /* The one dominant headline in this section. */
+  .overview-headline {
+    margin-top: 0.6rem;
+    font-size: clamp(1.6rem, 6.5vw, 2.4rem);
+  }
+
+  .overview-body {
+    margin-top: 1rem;
+    max-width: 46ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* More room to breathe before the fact strip, and a bigger gap between
+     cards so the row doesn't read as cramped on either mobile or desktop.
+     Stacked one-per-row on mobile per marketing's spec (not the shared
+     2-up .stat-grid default, which would orphan the 3rd card). */
+  .overview-facts {
+    grid-template-columns: 1fr;
+    margin-top: 1.75rem;
+    gap: 0.85rem;
+  }
+
+  .overview-fact-card {
+    padding: 1.15rem 1rem;
+  }
+
+  .overview-fact-value {
+    font-size: clamp(1.5rem, 7vw, 2.1rem);
+  }
+
+  .overview-fact-label {
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+    opacity: 0.9;
+  }
+
+  @media (min-width: 640px) {
+    .overview-facts {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.1rem;
+    }
+
+    .overview-fact-card {
+      padding: 1.5rem 1.15rem;
+    }
+  }
+</style>

@@ -1,0 +1,40 @@
+---
+import { Image } from 'astro:assets';
+import axonLogoOriginal from '../assets/images/Axon_logo.png';
+import axonLogoDarkTheme from '../assets/images/axon-logo-dark-theme.png';
+
+interface Props {
+  width?: number;
+  variant?: 'original' | 'dark-theme';
+  class?: string;
+}
+
+const { width = 90, variant = 'original', class: className } = Astro.props;
+// Two Axon files exist: the ORIGINAL full-colour mark (crimson + dark-grey
+// "DEVELOPERS") is legible only on light/cream backgrounds — used on the
+// About the Developer section. The DARK-THEME variant (crimson + light/
+// white "DEVELOPERS") is legible only on dark backgrounds — used in the
+// header, which reverted to a uniform dark strip in the design-review pass.
+const src = variant === 'dark-theme' ? axonLogoDarkTheme : axonLogoOriginal;
+---
+
+{/* The wrapper needs an explicit CSS width — without it, `width: 100%` on
+    the img below has no definite containing block to resolve against, and
+    the browser falls back to the img's full fetched raster size (3x the
+    intended display width) instead of scaling down. */}
+<span class:list={['axon-logo', className]} style={`width: ${width}px;`}>
+  <Image src={src} alt="Axon Developers" width={width * 3} />
+</span>
+
+<style>
+  .axon-logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .axon-logo :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>

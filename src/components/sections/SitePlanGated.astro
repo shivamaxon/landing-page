@@ -5,30 +5,24 @@ import Placeholder from '../Placeholder.astro';
 <section class="section section--forest-deep" id="site-plan">
   <div class="section-inner">
     <p class="eyebrow reveal">The Layout</p>
-    <h2 class="section-title reveal">Site Plan &amp; Floor Plans</h2>
+    <h2 class="section-title reveal">Site Plan</h2>
     <p class="section-body reveal reveal-delay-1">
-      Share your details to unlock the site plan and floor plans for The
-      Riviera.
+      Share your details to unlock the site plan for The Riviera.
     </p>
 
     <div class="gate reveal reveal-delay-2">
       <div class="gate__locked-asset">
         <Placeholder label="Site Plan" aspectRatio="1 / 1" />
-        <Placeholder label="Floor Plan" aspectRatio="1 / 1" />
       </div>
       <div class="gate__unlocked-asset">
         <Placeholder label="Site Plan — unlocked" aspectRatio="1 / 1" />
-        <Placeholder label="Floor Plan — unlocked" aspectRatio="1 / 1" />
       </div>
       <div class="gate__overlay">
         <div class="gate__icon">&#128274;</div>
-        <p style="font-weight: 700; font-size: 0.9rem;">Unlock the plans</p>
+        <p style="font-weight: 700; font-size: 0.9rem;">Unlock the Site Plan</p>
         <div class="gate__actions">
           <button type="button" class="btn btn-primary" data-gate-trigger data-intent="siteplan">
             View Site Plan
-          </button>
-          <button type="button" class="btn btn-outline" data-gate-trigger data-intent="floorplan">
-            View Floor Plan
           </button>
         </div>
       </div>
@@ -38,20 +32,28 @@ import Placeholder from '../Placeholder.astro';
 
 <style>
   .gate__locked-asset {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.6rem;
     padding: 0.9rem;
     max-width: 320px;
     margin: 0 auto;
   }
 
   .gate.is-unlocked .gate__unlocked-asset {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.6rem;
+    display: block;
     padding: 0.9rem;
     max-width: 320px;
     margin: 0 auto;
+  }
+
+  /* The overlay must stay above the locked asset and remain clickable at
+     every viewport width — explicit here rather than relying on DOM order
+     alone, since a desktop click-doesn't-work report was traced to this
+     section. */
+  .gate__overlay {
+    z-index: 1;
+    pointer-events: auto;
+  }
+
+  .gate__actions button {
+    pointer-events: auto;
   }
 </style>

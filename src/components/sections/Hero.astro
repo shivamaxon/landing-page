@@ -1,35 +1,62 @@
 ---
 import { Picture } from 'astro:assets';
-import heroImage from '../../assets/images/Gad river view drone shot.jpg';
+import hero1 from '../../assets/images/Hero1.png';
+import hero2 from '../../assets/images/Hero2.png';
+import hero3 from '../../assets/images/Hero3.png';
+
+const heroImages = [hero1, hero2, hero3];
 ---
 
 <section class="hero" id="home">
-  <Picture
-    src={heroImage}
-    alt="Aerial drone view of the Gad River"
-    widths={[400, 800, 1200, 1920]}
-    sizes="100vw"
-    formats={['avif', 'webp']}
-    fallbackFormat="webp"
-    loading="eager"
-    fetchpriority="high"
-    decoding="sync"
-    class="hero__image"
-  />
+  <div class="hero__images">
+    {
+      heroImages.map((img, i) => (
+        <Picture
+          src={img}
+          alt="The Riviera — riverfront villa plots on the Gad River"
+          widths={[400, 800, 1200, 1920]}
+          sizes="100vw"
+          formats={['avif', 'webp']}
+          fallbackFormat="webp"
+          loading={i === 0 ? 'eager' : 'lazy'}
+          fetchpriority={i === 0 ? 'high' : 'auto'}
+          decoding={i === 0 ? 'sync' : 'async'}
+          class:list={['hero__image', { 'is-active': i === 0 }]}
+          data-hero-slide={i}
+        />
+      ))
+    }
+  </div>
   <div class="hero__overlay"></div>
   <div class="hero__content">
     <h1 class="hero__title">The Riviera</h1>
-    <p class="hero__tagline">India's Rarest Riverfront Address.</p>
+    <p class="hero__tagline">India's Most Exclusive River Side Living</p>
     <div class="hero__actions">
       <button type="button" class="btn btn-primary" data-gate-trigger data-intent="enquiry">
         Enquire Now
       </button>
-      <a href="#scarcity" class="btn btn-outline">
+      <a href="#overview" class="btn btn-outline">
         Discover More
       </a>
     </div>
   </div>
 </section>
+
+<script>
+  const ROTATE_INTERVAL_MS = 4500;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const slides = Array.from(document.querySelectorAll('[data-hero-slide]'));
+  if (!reducedMotion && slides.length > 1) {
+    let active = 0;
+    window.setInterval(() => {
+      const next = (active + 1) % slides.length;
+      slides[active].classList.remove('is-active');
+      slides[next].classList.add('is-active');
+      active = next;
+    }, ROTATE_INTERVAL_MS);
+  }
+</script>
 
 <style>
   .hero {
@@ -40,13 +67,24 @@ import heroImage from '../../assets/images/Gad river view drone shot.jpg';
     overflow: hidden;
   }
 
+  .hero__images {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
   .hero__image {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: 0;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  .hero__image.is-active {
+    opacity: 1;
     animation: hero-zoom 20s ease-out forwards;
   }
 
@@ -61,7 +99,16 @@ import heroImage from '../../assets/images/Gad river view drone shot.jpg';
 
   @media (prefers-reduced-motion: reduce) {
     .hero__image {
+      transition: none;
       animation: none;
+    }
+
+    .hero__image:first-child {
+      opacity: 1;
+    }
+
+    .hero__image:not(:first-child) {
+      display: none;
     }
   }
 
@@ -70,9 +117,9 @@ import heroImage from '../../assets/images/Gad river view drone shot.jpg';
     inset: 0;
     background: linear-gradient(
       180deg,
-      rgba(22, 158, 170, 0.5) 0%,
-      rgba(10, 110, 133, 0.7) 55%,
-      rgba(4, 45, 47, 0.92) 100%
+      rgba(4, 20, 18, 0.08) 0%,
+      rgba(4, 20, 18, 0.22) 50%,
+      rgba(4, 20, 18, 0.78) 100%
     );
     z-index: 1;
   }
@@ -93,6 +140,7 @@ import heroImage from '../../assets/images/Gad river view drone shot.jpg';
     font-size: clamp(2.5rem, 10vw, 4.5rem);
     color: var(--text-on-dark);
     line-height: 1.05;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
   }
 
   .hero__tagline {

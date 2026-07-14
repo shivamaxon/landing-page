@@ -3,31 +3,17 @@ import ImageFrame from '../ImageFrame.astro';
 import roadImage from '../../assets/images/road to location.png';
 import mapImage from '../../assets/images/Beaches from site (on India\'s Map).png';
 
-// Key distances — every figure here comes straight from brand-guidelines.md.
+// Key distances — every figure here is supplied directly by marketing for
+// this revision pass, in this exact order. "On NH-66" was dropped as its
+// own box (design review pass) since the section title already states the
+// NH-66 framing — keeping it as a 5th box was redundant. "Next door — Goa"
+// (an earlier, older entry) was already removed in the prior pass.
 const keyDistances = [
-  { name: 'Beaches', time: '25 min' },
-  { name: 'Sindhudurg Fort', time: '40 min' },
-  { name: 'Airport', time: '50 min' },
-  { name: 'Goa', time: 'Next door' },
+  { name: 'To beaches', time: '25 min' },
+  { name: 'To Sindhudurg Airport', time: '50 min' },
+  { name: 'To Goa International Airport (MOPA)', time: '60 min' },
+  { name: 'To Sindhudurg Fort', time: '40 min' },
 ];
-
-// Nearby beaches — names only. brand-guidelines.md has no per-beach drive
-// time (only the generic "Beaches: 25 min" bucket above), so `time` stays
-// undefined here. Each item supports an optional `time` field — drop a real
-// value in per-beach later and the checklist will render it automatically,
-// no template changes needed.
-const nearbyBeaches: { name: string; time?: string }[] = [
-  { name: 'Munage Beach' },
-  { name: 'Achara Beach' },
-  { name: 'Tondavali Beach' },
-  { name: 'Malvan Beach' },
-  { name: 'Tarkarli Beach' },
-  { name: 'Bhogwe Beach' },
-  { name: 'Vengurla Beach' },
-];
-
-// Other nearby points — same optional-time shape as nearbyBeaches.
-const otherNearby: { name: string; time?: string }[] = [{ name: 'Kudal Railway Station' }];
 
 // Lightbox index 9 — the map is appended after the 9 gallery images in
 // Lightbox.astro. Keep in sync if that array's composition changes.
@@ -40,22 +26,23 @@ const MAP_LIGHTBOX_INDEX = 9;
     alt="Road connecting to the project location"
     ratio="16/9"
     focal="center 58%"
-    class="reveal"
+    class="reveal location-banner"
   />
-  <div class="section-inner" style="margin-top: 1rem;">
-    <p class="eyebrow reveal">The Address</p>
+  <div class="section-inner location-inner" style="margin-top: 1rem;">
+    <p class="eyebrow reveal">The Place</p>
     <h2 class="section-title reveal">On NH-66, the Mumbai–Goa Corridor</h2>
     <p class="section-body reveal reveal-delay-1">
-      Positioned in Konkan, Sindhudurg, beside the Gad River — connected
-      directly to the coastal highway that links Mumbai to Goa.
+      The Gad is one of Konkan's last pristine perennial rivers — it runs
+      through dense forest before it reaches the Arabian Sea. You're on it,
+      on NH-66, with Goa a short drive away and none of Goa's noise.
     </p>
 
     <p class="eyebrow reveal" style="margin-top: 1.25rem;">Key Distances</p>
-    <div class="stat-grid">
+    <div class="stat-grid location-distances">
       {
         keyDistances.map((s, i) => (
           <div class={`stat-card reveal reveal-delay-${Math.min(i + 1, 3)}`}>
-            <div class="stat-card__value">{s.time}</div>
+            {s.time && <div class="stat-card__value">{s.time}</div>}
             <div class="stat-card__label">{s.name}</div>
           </div>
         ))
@@ -63,61 +50,71 @@ const MAP_LIGHTBOX_INDEX = 9;
     </div>
   </div>
 
-  <p class="eyebrow reveal map-section-label">On the Map</p>
-  <button
-    type="button"
-    data-lightbox-trigger
-    data-lightbox-index={MAP_LIGHTBOX_INDEX}
-    aria-label="Tap to expand: location map with nearby beaches and connectivity"
-    class="map-trigger reveal"
-  >
-    <ImageFrame
-      src={mapImage}
-      alt="Map showing The Riviera's location with nearby beaches, Kudal Railway Station, the airport, and the NH-66 route"
-      ratio="5/3"
-      mode="contain"
-      widths={[400, 800, 1200, 1600]}
-    />
-    <span class="map-trigger__badge">
-      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
-        <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-      </svg>
-      Tap to expand
-    </span>
-  </button>
-
-  <div class="section-inner">
-    <p class="section-body reveal" style="margin-top: 1.25rem;">
-      All within easy reach of the site.
-    </p>
-    <p class="eyebrow reveal" style="margin-top: 1rem;">Beaches Near the Site</p>
-    <ul class="check-list reveal">
-      {
-        nearbyBeaches.map((b) => (
-          <li class="check-list__item">
-            <span class="check-list__icon" aria-hidden="true">
-              &#10003;
-            </span>
-            <span>{b.name}</span>
-            {b.time && <span class="check-list__time">{b.time}</span>}
-          </li>
-        ))
-      }
-    </ul>
-
-    <ul class="check-list reveal" style="margin-top: 0.75rem;">
-      {
-        otherNearby.map((n) => (
-          <li class="check-list__item">
-            <span class="check-list__icon" aria-hidden="true">
-              &#10003;
-            </span>
-            <span>{n.name}</span>
-            {n.time && <span class="check-list__time">{n.time}</span>}
-          </li>
-        ))
-      }
-    </ul>
+  <div class="location-map-wrap" id="location-map">
+    <p class="eyebrow reveal map-section-label section-inner">On the Map</p>
+    <button
+      type="button"
+      data-lightbox-trigger
+      data-lightbox-index={MAP_LIGHTBOX_INDEX}
+      aria-label="Tap to expand: location map with nearby beaches and connectivity"
+      class="map-trigger reveal"
+    >
+      <ImageFrame
+        src={mapImage}
+        alt="Map showing The Riviera's location with nearby beaches, Kudal Railway Station, the airport, and the NH-66 route"
+        ratio="5/3"
+        mode="contain"
+        widths={[400, 800, 1200, 1600]}
+      />
+      <span class="map-trigger__badge">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+          <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        Tap to expand
+      </span>
+    </button>
   </div>
 </section>
+
+<style>
+  /* Desktop fix: previously the road banner (full-bleed) dominated the
+     first viewport while the distances/map sat in a narrow 560px column
+     lost in a wide desktop canvas — marketing flagged the map/distances as
+     effectively invisible without scrolling past a lot of empty space.
+     Cap the section's visual width on larger viewports so the banner, key
+     distances, and map all read as one compact, clearly visible block. */
+  @media (min-width: 900px) {
+    .location-banner {
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .location-map-wrap .map-trigger {
+      width: 100%;
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .location-distances {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* With the beaches tick-list removed (design review pass), the map is the
+     section's closing visual — give it more breathing room above and below
+     instead of being followed immediately by a dense text list. */
+  .location-map-wrap {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    /* The nav's "Location" link now anchors here (#location-map) instead
+       of the section top, so this needs its own scroll-margin-top — the
+       generic `section[id]` rule doesn't apply since this is a div, not a
+       section. Header is fixed: 2 x 1rem (16px) vertical padding + the
+       44px nav-toggle (the tallest header child) = 76px actual height;
+       12px added as breathing room above the map after the jump. */
+    scroll-margin-top: 88px;
+  }
+</style>

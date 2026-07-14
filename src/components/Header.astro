@@ -1,21 +1,25 @@
 ---
 import Logo from './Logo.astro';
+import AxonLogo from './AxonLogo.astro';
 ---
 
 <header class="site-header">
   <div class="site-header__logo">
     <Logo width={100} variant="light" />
   </div>
-  <button id="navToggle" class="site-header__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
+  <div class="site-header__right">
+    <AxonLogo width={52} variant="dark-theme" class="site-header__axon-logo" />
+    <button id="navToggle" class="site-header__toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
 </header>
 
 <nav id="siteNav" class="site-nav">
-  <a href="#scarcity">Overview</a>
-  <a href="#location">Location</a>
+  <a href="#overview">Overview</a>
+  <a href="#location-map">Location</a>
   <a href="#growth">Growth Story</a>
   <a href="#gallery">Gallery</a>
   <a href="#site-plan">Site Plan</a>

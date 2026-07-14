@@ -1,47 +1,101 @@
 ---
-import ImageFrame from '../ImageFrame.astro';
-import growthImage from '../../assets/images/4.png';
+import { Picture } from 'astro:assets';
+import Carousel from '../Carousel.astro';
+import coastalHighway from '../../assets/images/infra-coastal-highway.png';
+import bridge from '../../assets/images/infra-bridge.png';
+import expressway from '../../assets/images/infra-expressway.png';
+import filmCity from '../../assets/images/infra-film-city.png';
+import underwaterMuseum from '../../assets/images/infra-underwater-museum.png';
 
+// Design-review pass: converted from a static grid into a horizontal
+// peek-carousel, sharing the same Carousel component + carousel.js as the
+// Lifestyle section so both feel like one component (same peek amount,
+// autoplay timing, and edge-positioned arrows). Card visual design
+// (background image + dark gradient overlay + figure + label) is unchanged.
 const infra = [
-  { value: '₹68,720 Cr', label: 'Coastal highway' },
-  { value: '₹7,851 Cr', label: 'Bridge project' },
-  { value: '18h → 7–8h', label: 'Shaktipeeth expressway, Nagpur–Goa, by 2028–29' },
-  { value: '₹2,000 Cr', label: 'Film city' },
-  { value: '₹46.9 Cr', label: 'Underwater museum & scuba centre' },
+  { src: coastalHighway, value: '₹68,720 Cr', label: 'Coastal highway' },
+  { src: bridge, value: '₹7,851 Cr', label: 'Bridge project' },
+  { src: expressway, value: '18h → 7–8h', label: 'Shaktipeeth expressway, Nagpur–Goa, by 2028–29' },
+  { src: filmCity, value: '₹2,000 Cr', label: 'Film city' },
+  { src: underwaterMuseum, value: '₹46.9 Cr', label: 'Underwater museum & scuba centre' },
 ];
 ---
 
 <section class="section section--forest" id="growth">
-  <ImageFrame
-    src={growthImage}
-    alt="Upcoming infrastructure projects in Sindhudurg"
-    ratio="21/9"
-    mode="contain"
-    class="reveal"
-  />
-  <div class="section-inner" style="margin-top: 1rem;">
+  <div class="section-inner">
     <p class="eyebrow reveal">Why Now, Why Here</p>
-    <h2 class="section-title reveal">Sindhudurg Is Being Built For What's Next</h2>
+    <h2 class="section-title reveal">Sindhudurg — The Tourist Destination &amp; Upcoming Development</h2>
     <p class="section-body reveal reveal-delay-1">
       Land value moves ahead of infrastructure. Sindhudurg is at the point
       where major, already-sanctioned projects are underway.
     </p>
-    <div class="stat-grid">
+  </div>
+
+  <div class="reveal">
+    <Carousel count={infra.length} ariaLabel="Sindhudurg infrastructure projects">
       {
         infra.map((item, i) => (
-          <div
-            class:list={[
-              'stat-card',
-              'reveal',
-              `reveal-delay-${Math.min(i + 1, 3)}`,
-              { 'span-all': i === infra.length - 1 && infra.length % 2 !== 0 },
-            ]}
-          >
-            <div class="stat-card__value">{item.value}</div>
-            <div class="stat-card__label">{item.label}</div>
+          <div class="carousel__slide infra-card" data-carousel-slide>
+            <Picture
+              src={item.src}
+              alt={item.label}
+              widths={[400, 640, 960]}
+              sizes="(min-width: 640px) 60vw, 84vw"
+              formats={['avif', 'webp']}
+              fallbackFormat="webp"
+              loading={i === 0 ? 'eager' : 'lazy'}
+              class="infra-card__image"
+            />
+            <div class="infra-card__overlay">
+              <div class="infra-card__value">{item.value}</div>
+              <div class="infra-card__label">{item.label}</div>
+            </div>
           </div>
         ))
       }
-    </div>
+    </Carousel>
   </div>
 </section>
+
+<style>
+  /* Fixed aspect-ratio keeps every card the same reserved height regardless
+     of image load timing — CLS stays ~0. */
+  .infra-card {
+    aspect-ratio: 4 / 5;
+  }
+
+  .infra-card__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .infra-card__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.25rem 1.1rem;
+    background: linear-gradient(180deg, rgba(4, 45, 47, 0) 40%, rgba(4, 45, 47, 0.88) 100%);
+  }
+
+  .infra-card__value {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.4rem, 6vw, 1.75rem);
+    color: var(--text-on-dark);
+    line-height: 1.1;
+  }
+
+  .infra-card__label {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--text-on-dark);
+    margin-top: 0.4rem;
+    line-height: 1.35;
+  }
+</style>

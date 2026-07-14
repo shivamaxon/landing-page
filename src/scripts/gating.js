@@ -2,10 +2,12 @@ const STORAGE_KEY = 'riviera_lead_captured';
 
 // ---------------------------------------------------------------------------
 // Popup timing — tune here, nowhere else.
+// Retuned per marketing review: scroll-depth triggers removed entirely,
+// timer only, fires once at 30s, one re-fire at 90s (30s + 60s) if still
+// dismissed, then stops for the session (no indefinite looping).
 // ---------------------------------------------------------------------------
-const POPUP_FIRST_DELAY_MS = 15000; // first fire, ~15s after load
-const POPUP_REPEAT_INTERVAL_MS = 45000; // re-fire cadence if dismissed, ~45s
-const SCROLL_TRIGGER_THRESHOLDS = [50, 90]; // percent scrolled
+const POPUP_FIRST_DELAY_MS = 30000; // first fire, 30s after load
+const POPUP_REFIRE_DELAY_MS = 60000; // single re-fire, 60s after the first, then stop
 
 function hasCaptured() {
   return sessionStorage.getItem(STORAGE_KEY) === 'true';
@@ -26,16 +28,16 @@ function submitLead(data) {
 const INTENT_HEADINGS = {
   enquiry: 'Get the Details',
   siteplan: 'Unlock the Site Plan',
-  floorplan: 'Unlock the Floor Plan',
   brochure: 'Download the Brochure',
   sitevisit: 'Book a Site Visit',
 };
 
-const DOWNLOAD_INTENTS = new Set(['brochure', 'siteplan', 'floorplan']);
+const DOWNLOAD_INTENTS = new Set(['brochure', 'siteplan']);
 
 function triggerDownload(intent) {
-  // TODO: replace with a signed, expiring-URL fetch from the backend once
-  // real gated assets exist, e.g.:
+  // TODO: real brochure to be served via a signed, expiring S3 URL issued
+  // by the backend only AFTER lead capture — replace this stub fetch with
+  // that once the backend exists, e.g.:
   //   const { url } = await fetch(`/api/assets/${intent}?token=...`).then(r => r.json());
   //   then point the anchor at `url` instead of the static stub below.
   const stubUrl = '/downloads/placeholder-asset.txt';
@@ -87,7 +89,6 @@ function isModalOpen() {
 
 function openModal(intent = 'enquiry') {
   if (hasCaptured()) return;
-  modal.classList.remove('is-submitted');
   modal.classList.add('is-open');
   modal.setAttribute('aria-hidden', 'false');
   modalHeading.textContent = INTENT_HEADINGS[intent] || INTENT_HEADINGS.enquiry;
@@ -149,6 +150,7 @@ function refreshValidation() {
   input.addEventListener('blur', refreshValidation);
 });
 consentInput.addEventListener('change', refreshValidation);
+refreshValidation();
 
 form.addEventListener('submit', (event) => {
   event.preventDefault();
@@ -170,15 +172,9 @@ form.addEventListener('submit', (event) => {
   submitLead(lead).then(() => {
     markCaptured();
     stopPopups();
-    modal.classList.add('is-submitted');
-
-    if (DOWNLOAD_INTENTS.has(intent)) {
-      triggerDownload(intent);
-    }
-
-    document.querySelectorAll('.gate').forEach((gate) => gate.classList.add('is-unlocked'));
-
-    window.setTimeout(closeModal, 1800);
+    // Real navigation (not a modal state) so Google Ads / Meta conversion
+    // pixels on /thank-you fire against a distinct URL.
+    window.location.href = `/thank-you?intent=${encodeURIComponent(intent)}`;
   });
 });
 
@@ -251,46 +247,25 @@ siteNav.querySelectorAll('a').forEach((link) => {
 });
 
 // ---------------------------------------------------------------------------
-// Timed + scroll popup — the aggressive part. Stops completely once captured.
+// Timed popup only (scroll-depth triggers removed per marketing review).
+// Fires once at POPUP_FIRST_DELAY_MS, re-fires once at +POPUP_REFIRE_DELAY_MS
+// if still dismissed, then stops permanently for the session. Also stops
+// completely once captured.
 // ---------------------------------------------------------------------------
 function maybeShowPopup() {
   if (hasCaptured() || isModalOpen()) return;
   openModal('enquiry');
 }
 
-let popupTimerId = window.setTimeout(function fireAndReschedule() {
-  if (hasCaptured()) {
-    stopPopups();
-    return;
-  }
+let popupTimerId = window.setTimeout(() => {
   maybeShowPopup();
-  popupTimerId = window.setTimeout(fireAndReschedule, POPUP_REPEAT_INTERVAL_MS);
+  popupTimerId = window.setTimeout(() => {
+    maybeShowPopup();
+  }, POPUP_REFIRE_DELAY_MS);
 }, POPUP_FIRST_DELAY_MS);
-
-const firedThresholds = new Set();
-let scrollTicking = false;
-
-function onScroll() {
-  if (scrollTicking) return;
-  scrollTicking = true;
-  window.requestAnimationFrame(() => {
-    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-    const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
-    SCROLL_TRIGGER_THRESHOLDS.forEach((t) => {
-      if (pct >= t && !firedThresholds.has(t)) {
-        firedThresholds.add(t);
-        maybeShowPopup();
-      }
-    });
-    scrollTicking = false;
-  });
-}
-
-window.addEventListener('scroll', onScroll);
 
 function stopPopups() {
   window.clearTimeout(popupTimerId);
-  window.removeEventListener('scroll', onScroll);
 }
 
 // ---------------------------------------------------------------------------
@@ -300,4 +275,13 @@ document.getElementById('whatsappFab')?.addEventListener('click', () => {
   // TODO: fire a Meta pixel "Contact" (or custom "WhatsAppClick") event here
   // once the pixel is wired up, so this channel stays attributable.
   // Do not preventDefault — the wa.me link must still open normally.
+});
+
+// ---------------------------------------------------------------------------
+// Call button — direct dial, does not open the lead modal.
+// ---------------------------------------------------------------------------
+document.getElementById('callFab')?.addEventListener('click', () => {
+  // TODO: fire a Meta pixel / Google Ads "Contact" call-click event here
+  // once the pixel is wired up. Do not preventDefault — the tel: link must
+  // still open normally.
 });

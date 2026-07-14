@@ -2,21 +2,17 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import StickyCta from '../components/StickyCta.astro';
-import StickySideTabs from '../components/StickySideTabs.astro';
-import WhatsAppButton from '../components/WhatsAppButton.astro';
+import QuickContactStack from '../components/QuickContactStack.astro';
 import LeadModal from '../components/LeadModal.astro';
 import Lightbox from '../components/Lightbox.astro';
 import Hero from '../components/sections/Hero.astro';
-import ScarcityHook from '../components/sections/ScarcityHook.astro';
-import UspGrid from '../components/sections/UspGrid.astro';
+import RivieraOverview from '../components/sections/RivieraOverview.astro';
 import LocationConnectivity from '../components/sections/LocationConnectivity.astro';
-import WaterfrontPremium from '../components/sections/WaterfrontPremium.astro';
-import GrowthThesis from '../components/sections/GrowthThesis.astro';
-import InvestmentCase from '../components/sections/InvestmentCase.astro';
-import LifestyleGallery from '../components/sections/LifestyleGallery.astro';
 import LifestyleDetail from '../components/sections/LifestyleDetail.astro';
+import LifestyleGallery from '../components/sections/LifestyleGallery.astro';
+import GrowthThesis from '../components/sections/GrowthThesis.astro';
 import SitePlanGated from '../components/sections/SitePlanGated.astro';
-import AxonPromise from '../components/sections/AxonPromise.astro';
+import AboutDeveloper from '../components/sections/AboutDeveloper.astro';
 import BookSiteVisit from '../components/sections/BookSiteVisit.astro';
 import FinalCta from '../components/sections/FinalCta.astro';
 import Footer from '../components/sections/Footer.astro';
@@ -25,28 +21,25 @@ import Footer from '../components/sections/Footer.astro';
 <Layout>
   <Header />
   <Hero />
-  <ScarcityHook />
-  <UspGrid />
+  <RivieraOverview />
   <LocationConnectivity />
-  <WaterfrontPremium />
-  <GrowthThesis />
-  <InvestmentCase />
-  <LifestyleGallery />
   <LifestyleDetail />
+  <LifestyleGallery />
+  <GrowthThesis />
   <SitePlanGated />
-  <AxonPromise />
+  <AboutDeveloper />
   <BookSiteVisit />
   <FinalCta />
   <Footer />
   <StickyCta />
-  <StickySideTabs />
-  <WhatsAppButton />
+  <QuickContactStack />
   <LeadModal />
   <Lightbox />
 
   <script>
     import '../scripts/reveal.js';
     import '../scripts/lightbox.js';
+    import '../scripts/carousel.js';
     import '../scripts/gating.js';
   </script>
 </Layout>

@@ -8,7 +8,7 @@ import { galleryImages } from '../../data/gallery-images.js';
     <p class="eyebrow reveal">The Lifestyle</p>
     <h2 class="section-title reveal">Everyday Life, Riverfront</h2>
   </div>
-  <div class="gallery-grid">
+  <div class="gallery-grid gallery-grid--capped">
     {
       galleryImages.map((img, i) => (
         <button
@@ -24,3 +24,15 @@ import { galleryImages } from '../../data/gallery-images.js';
     }
   </div>
 </section>
+
+<style>
+  /* Marketing flagged gallery tiles as too large on desktop — cap the
+     grid's rendered width instead of letting it stretch full viewport. */
+  @media (min-width: 900px) {
+    .gallery-grid--capped {
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+</style>

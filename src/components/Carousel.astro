@@ -1,0 +1,44 @@
+---
+// Shared horizontal peek-carousel shell (track + edge arrows + dots) used
+// by both LifestyleDetail and GrowthThesis (design-review pass) so the two
+// sections share identical structure/behavior instead of each hand-rolling
+// their own. Callers supply their own card markup as children, each card
+// wrapped in a `.carousel__slide[data-carousel-slide]` div; this component
+// owns only the carousel mechanics, not card visuals.
+interface Props {
+  count: number;
+  ariaLabel: string;
+}
+
+const { count, ariaLabel } = Astro.props;
+---
+
+<div class="carousel" data-carousel role="group" aria-label={ariaLabel}>
+  <div class="carousel__track" data-carousel-track>
+    <slot />
+  </div>
+
+  <button type="button" class="carousel__arrow carousel__arrow--prev" data-carousel-prev aria-label="Previous">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+      <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+  <button type="button" class="carousel__arrow carousel__arrow--next" data-carousel-next aria-label="Next">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+      <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  <div class="carousel__dots" data-carousel-dots>
+    {
+      Array.from({ length: count }).map((_, i) => (
+        <button
+          type="button"
+          class="carousel__dot"
+          data-carousel-dot={i}
+          aria-label={`Go to slide ${i + 1}`}
+        />
+      ))
+    }
+  </div>
+</div>

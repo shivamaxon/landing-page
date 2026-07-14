@@ -1,46 +1,122 @@
 ---
-const details = [
+import { Picture } from 'astro:assets';
+import Carousel from '../Carousel.astro';
+import boatImg from '../../assets/images/couple driving the boat.png';
+import villaImg from '../../assets/images/couple walking along villas.png';
+import riverViewImg from '../../assets/images/river view from site.png';
+import konkanImg from '../../assets/images/site view along river drone view.png';
+
+// Design-review pass: rebuilt from a static 2x2 fact-card grid into a
+// horizontal peek-carousel with a background photo per card (same visual
+// treatment as GrowthThesis's infra image cards). Sub-title line dropped —
+// each card now carries just the bold headline + body copy. Carousel
+// mechanics (track/arrows/dots/autoplay) come from the shared Carousel
+// component + carousel.js, the same ones GrowthThesis's infra cards use.
+// Images chosen fresh (not reused from the LifestyleGallery's 9 photos) so
+// this section doesn't repeat what the gallery already shows.
+const cards = [
   {
-    value: 'Private',
-    label: 'Boat Access',
-    desc: 'Step from your plot directly onto the river — private boat access for every villa.',
+    img: boatImg,
+    focal: 'center 55%',
+    label: 'Your own boat, your own jetty',
+    desc: 'Step off your lawn and onto the Gad. Cruises, fishing, kayaking, or nowhere in particular.',
   },
   {
-    value: 'Balinese',
-    label: 'Tropical Architecture',
-    desc: 'Villas designed around open, tropical Balinese architecture suited to the Konkan climate.',
+    img: villaImg,
+    focal: 'center',
+    label: 'One architectural language',
+    desc: 'Balinese tropical, built for the Konkan climate. A neighbourhood that ages well because it was designed as one.',
   },
   {
-    value: 'Year-Round',
-    label: 'Konkan Excursions',
-    desc: 'Beaches, forts, and the river itself — a destination to return to through every season.',
+    img: riverViewImg,
+    focal: 'center 58%',
+    label: 'A view that stays yours',
+    desc: 'Every plot is planned so nothing is ever built in front of it. The river you buy is the river you keep.',
+  },
+  {
+    img: konkanImg,
+    focal: 'center 58%',
+    label: 'Konkan, all year',
+    desc: 'Forts, empty beaches, the monsoon. A place worth returning to in every season.',
   },
 ];
 ---
 
-<section class="section section--cream">
+<section class="section section--cream" id="lifestyle">
   <div class="section-inner">
-    <p class="eyebrow reveal">The Lifestyle, In Detail</p>
-    <h2 class="section-title reveal">Living On the Water, Not Just Near It</h2>
-    <div class="stat-grid">
+    <p class="eyebrow reveal">The Lifestyle</p>
+    <h2 class="section-title reveal">Living on the water, not near it.</h2>
+  </div>
+
+  <div class="reveal">
+    <Carousel count={cards.length} ariaLabel="Lifestyle highlights">
       {
-        details.map((d, i) => (
-          <div
-            class:list={[
-              'stat-card',
-              'reveal',
-              `reveal-delay-${Math.min(i + 1, 3)}`,
-              { 'span-all': i === details.length - 1 && details.length % 2 !== 0 },
-            ]}
-          >
-            <div class="stat-card__value" style="font-size: clamp(1.05rem, 5vw, 1.3rem);">
-              {d.value}
+        cards.map((c, i) => (
+          <div class="carousel__slide lifestyle-card" data-carousel-slide>
+            <Picture
+              src={c.img}
+              alt={c.label}
+              widths={[400, 640, 960]}
+              sizes="(min-width: 640px) 60vw, 84vw"
+              formats={['avif', 'webp']}
+              fallbackFormat="webp"
+              loading={i === 0 ? 'eager' : 'lazy'}
+              class="lifestyle-card__image"
+              style={`object-position: ${c.focal};`}
+            />
+            <div class="lifestyle-card__overlay">
+              <div class="lifestyle-card__title">{c.label}</div>
+              <div class="lifestyle-card__desc">{c.desc}</div>
             </div>
-            <div class="stat-card__label">{d.label}</div>
-            <div class="stat-card__desc">{d.desc}</div>
           </div>
         ))
       }
-    </div>
+    </Carousel>
   </div>
 </section>
+
+<style>
+  /* Fixed aspect-ratio (not a min-height guess) keeps every card the same
+     reserved height regardless of image load timing — CLS stays ~0. */
+  .lifestyle-card {
+    aspect-ratio: 4 / 5;
+  }
+
+  .lifestyle-card__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .lifestyle-card__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.25rem 1.1rem;
+    background: linear-gradient(180deg, rgba(4, 45, 47, 0) 42%, rgba(4, 20, 18, 0.88) 100%);
+  }
+
+  .lifestyle-card__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: clamp(1.05rem, 4.6vw, 1.35rem);
+    color: var(--text-on-dark);
+    line-height: 1.15;
+  }
+
+  .lifestyle-card__desc {
+    margin-top: 0.5rem;
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-on-dark);
+    opacity: 0.92;
+  }
+</style>

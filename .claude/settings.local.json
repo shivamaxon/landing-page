@@ -54,7 +54,25 @@
       "Bash(npx --yes lighthouse http://localhost:4321/ --only-categories=performance --preset=perf --form-factor=mobile --screenEmulation.mobile --throttling-method=simulate --chrome-flags=\"--headless\" --output=json --output-path=/tmp/lh-final.json)",
       "Bash(npx --yes lighthouse http://localhost:4321/ --only-categories=performance --preset=perf --form-factor=mobile --screenEmulation.mobile --throttling-method=simulate --chrome-flags=\"--headless\" --output=json --output-path=/tmp/lh-p5.json)",
       "Bash(pip3 install *)",
-      "Bash(npx --yes lighthouse http://localhost:4321/ --only-categories=performance --preset=perf --form-factor=mobile --screenEmulation.mobile --throttling-method=simulate --chrome-flags=\"--headless\" --output=json --output-path=/tmp/lh-p6.json)"
+      "Bash(npx --yes lighthouse http://localhost:4321/ --only-categories=performance --preset=perf --form-factor=mobile --screenEmulation.mobile --throttling-method=simulate --chrome-flags=\"--headless\" --output=json --output-path=/tmp/lh-p6.json)",
+      "Bash(cp \"public/images/Axon_logo.png\" \"src/assets/images/Axon_logo.png\")",
+      "Bash(cp \"public/images/Hero1.png\" \"src/assets/images/Hero1.png\")",
+      "Bash(cp \"public/images/Hero2.png\" \"src/assets/images/Hero2.png\")",
+      "Bash(cp \"public/images/Hero3.png\" \"src/assets/images/Hero3.png\")",
+      "Bash(cp \"public/images/infra-coastal-highway.png\" \"src/assets/images/infra-coastal-highway.png\")",
+      "Bash(mkdir -p assets-private)",
+      "Bash(mv \"The RIVIERA-Brochure.pdf\" assets-private/)",
+      "Bash(/tmp/pdfenv/bin/pip install *)",
+      "Bash(/tmp/pdfenv/bin/python3 -c ' *)",
+      "Bash(cp \"public/images/couple driving the boat.png\" \"src/assets/images/\")",
+      "Bash(cp \"public/images/couple walking along villas.png\" \"src/assets/images/\")",
+      "Bash(cp \"public/images/river view from site.png\" \"src/assets/images/\")",
+      "Bash(cp \"public/images/site view along river drone view.png\" \"src/assets/images/\")",
+      "Bash(grep -o '<picture[^>]*>.\\\\{0,300\\\\}lifestyle-card__image[^>]*>' dist/index.html)",
+      "Bash(grep -o \"\\\\.site-header{[a-z0-9:;,%.\\\\- \\(\\)]*}\" dist/_astro/Logo.LlMyvT3v.css)",
+      "Bash(lsof -ti:4321)",
+      "Bash(xargs kill -9)",
+      "Bash(grep -rniE \"floor plan|freehold|rera|next door.{0,3}goa\" src/ dist/)"
     ]
   }
 }

@@ -1,0 +1,107 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Logo from '../components/Logo.astro';
+---
+
+<Layout title="Thank You | The Riviera by Axon Developers">
+  <main class="thank-you">
+    <div class="thank-you__logo">
+      <Logo width={150} variant="dark" />
+    </div>
+    <h1 class="thank-you__title">Thank You</h1>
+    <p class="thank-you__message">
+      Our team will be in touch shortly.
+    </p>
+    <p class="thank-you__next">
+      We'll reach out on the details you shared to walk you through The
+      Riviera — availability, pricing, and next steps. If you requested a
+      download, it will start automatically.
+    </p>
+    <a href="/" class="btn btn-primary thank-you__back">Back to Site</a>
+    <p class="thank-you__redirect-note">You'll be returned to the homepage automatically in a few seconds.</p>
+  </main>
+
+  <script>
+    // TODO: fire the Google Ads / Meta conversion pixel here, keyed off the
+    // `intent` query param (?intent=enquiry|siteplan|brochure|sitevisit),
+    // once those pixels are wired up. This page's distinct URL is exactly
+    // why the redirect happens here instead of showing a modal state.
+
+    const AUTO_REDIRECT_MS = 5000;
+    const DOWNLOAD_INTENTS = new Set(['brochure', 'siteplan']);
+
+    function triggerDownload(intent) {
+      // TODO: real brochure/site plan to be served via a signed, expiring
+      // S3 URL issued by the backend only AFTER lead capture — replace this
+      // stub with that fetch once the backend exists.
+      const stubUrl = '/downloads/placeholder-asset.txt';
+      const a = document.createElement('a');
+      a.href = stubUrl;
+      a.download = `riviera-${intent}-placeholder.txt`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const intent = params.get('intent');
+    if (intent && DOWNLOAD_INTENTS.has(intent)) {
+      triggerDownload(intent);
+    }
+
+    window.setTimeout(() => {
+      window.location.href = '/';
+    }, AUTO_REDIRECT_MS);
+  </script>
+
+  <style>
+    .thank-you {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      background: var(--brand-cream);
+    }
+
+    .thank-you__logo {
+      width: 150px;
+      margin-bottom: 1.5rem;
+    }
+
+    .thank-you__title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: clamp(1.75rem, 8vw, 2.5rem);
+      color: var(--text-on-light);
+    }
+
+    .thank-you__message {
+      margin-top: 0.75rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .thank-you__next {
+      margin-top: 0.75rem;
+      max-width: 420px;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      opacity: 0.85;
+    }
+
+    .thank-you__back {
+      margin-top: 2rem;
+    }
+
+    .thank-you__redirect-note {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      opacity: 0.6;
+    }
+  </style>
+</Layout>
