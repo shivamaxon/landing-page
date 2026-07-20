@@ -308,7 +308,9 @@ Then, outside the section flow (all `position: fixed`):
 - **QuickContactStack** (new, replaces `StickySideTabs.astro` and
   `WhatsAppButton.astro`, both deleted) — fixed right-side vertical stack, all
   viewports: WhatsApp (`wa.me` link, unchanged number/message) above a new
-  **Call button** (`tel:+919355499004`, direct dial, does not open the modal).
+  **Call button** (`tel:+919821003165`, direct dial, does not open the modal —
+  a deliberately different number from WhatsApp's, updated in a later pass; see
+  §5). Do not conflate the two.
   Both circular, 56px, each now wrapped in a `.quick-contact__ring-wrap`
   (56×56px, `overflow: visible`) carrying the pulse-ring animation — see below
   for why the ring lives on a wrapper rather than the button itself. Positioned
@@ -760,9 +762,10 @@ number as current.**
 - First-person plural voice ("we/our") in all copy.
 - No external links or outbound redirects — **two approved exceptions:** the
   WhatsApp floating button (`wa.me/919355499004`, prefilled message, opens in a
-  new tab) and the **Call button** (`tel:+919355499004`, added this pass, direct
-  dial). Internal links to `/thank-you` and `/privacy-policy` are fine (they're
-  not external). No other external links anywhere.
+  new tab) and the **Call button** (`tel:+919821003165`, direct dial). **These
+  are two deliberately different numbers** — updated in a later pass; do not
+  make them match. Internal links to `/thank-you` and `/privacy-policy` are
+  fine (they're not external). No other external links anywhere.
 - **No RERA references anywhere** — the project has no RERA number. "OC Applied"
   is the status indicator used instead (see §4, RivieraOverview). Do not
   reintroduce a RERA line or QR code.
