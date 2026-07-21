@@ -11,14 +11,20 @@ import villaRiverRow from '../assets/images/villa lined up against the river.png
 // Single source of truth for the lifestyle gallery — LifestyleGallery.astro
 // (grid tiles) and Lightbox.astro (full-size slides) both import this array,
 // so tile order and lightbox slide order can never drift apart.
+//
+// SEO copy pass: marketing supplied 8 SEO alt texts for what is a 9-image
+// gallery. 8 were matched to their image by content (see CLAUDE.md for the
+// reported mapping); the 9th (coupleRiver, "couple looking at river.png")
+// has no corresponding SEO alt and keeps its prior descriptive alt —
+// flagged for marketing to confirm/supply one.
 export const galleryImages = [
-  { src: villaPool, alt: 'Villa exterior with private swimming pool', focal: 'center 58%' },
-  { src: sittingPool, alt: 'Seating area along the swimming pool', focal: 'center 65%' },
-  { src: boatDock, alt: 'Private boat access at the dock', focal: 'center 58%' },
-  { src: boatSunset, alt: 'Boat on the river at sunset', focal: 'center 58%' },
+  { src: villaPool, alt: 'Villa exterior with private pool — riverfront plots in Sindhudurg', focal: 'center 58%' },
+  { src: sittingPool, alt: 'Poolside seating, The Riviera riverfront villa', focal: 'center 65%' },
+  { src: boatDock, alt: 'Private boat dock on the Gad River, The Riviera', focal: 'center 58%' },
+  { src: boatSunset, alt: 'Gad River at sunset — riverfront living in Konkan', focal: 'center 58%' },
   { src: coupleRiver, alt: 'Couple looking out at the river', focal: 'center 30%' },
-  { src: garden, alt: 'Walking along the landscaped garden', focal: 'center 60%' },
-  { src: livingRoom, alt: 'River view from a villa living room', focal: 'center' },
-  { src: villaLineup, alt: 'Villas lined up along the river at sunset', focal: 'center 45%' },
-  { src: villaRiverRow, alt: 'Villas lined up along the riverfront walkway', focal: 'center 55%' },
+  { src: garden, alt: 'Riverside villa garden walk, Sindhudurg', focal: 'center 60%' },
+  { src: livingRoom, alt: 'River-view living room, The Riviera villa plots', focal: 'center' },
+  { src: villaLineup, alt: 'Riverfront villas at sunset, Vagade, Sindhudurg', focal: 'center 45%' },
+  { src: villaRiverRow, alt: 'Villas along the Gad River riverfront walkway', focal: 'center 55%' },
 ];

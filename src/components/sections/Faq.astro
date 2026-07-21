@@ -1,0 +1,204 @@
+---
+// Single source of truth for both the visible accordion and the FAQPage
+// JSON-LD below, so the two can never drift apart. Answers are verbatim
+// from marketing's SEO copy pass; the pricing figures (300 sq yard,
+// ₹16,500/sq yard) are deliberately confined to this one answer — see
+// CLAUDE.md, pricing must not surface anywhere else on the page.
+const faqs = [
+  {
+    question: 'Where is The Riviera located?',
+    answer:
+      "The Riviera is in Vagade, Sindhudurg district, in the Konkan region of Maharashtra — directly on the Gad River, on NH-66 (the Mumbai–Goa corridor), roughly 50 minutes from Sindhudurg Airport and 70 minutes from Goa International Airport (MOPA).",
+  },
+  {
+    question: 'What is on offer at The Riviera?',
+    answer:
+      '20 exclusive river-touching villa plots — among the last riverfront residential plots in Sindhudurg, each planned so the river view stays permanently unobstructed.',
+  },
+  {
+    question: 'What are the plot sizes and pricing?',
+    answer: 'Plot sizes are 300 sq yard, with pricing starting at ₹16,500 per square yard.',
+  },
+  {
+    question: 'Why invest in Sindhudurg now?',
+    answer:
+      'Sindhudurg is seeing major sanctioned infrastructure — a ₹68,720 Cr coastal highway, the Shaktipeeth Expressway cutting Nagpur–Goa travel to 7–8 hours by 2028–29, a film city and more — placing riverfront plots in Sindhudurg ahead of the value curve.',
+  },
+  {
+    question: 'Can I use it as a second home or holiday home?',
+    answer:
+      'Yes — The Riviera is designed as a riverside second home in Konkan, with river access, beautiful landscapes and a cohesive Balinese-tropical villa community.',
+  },
+];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.answer,
+    },
+  })),
+};
+---
+
+<section class="section section--cream-cool" id="faq">
+  <div class="section-inner">
+    <h2 class="section-title reveal">Riverfront Plots in Sindhudurg — Frequently Asked Questions</h2>
+
+    <div class="faq-list reveal reveal-delay-1">
+      {
+        faqs.map((f, i) => (
+          <div class="faq-item">
+            <h3 class="faq-item__heading">
+              <button
+                type="button"
+                class="faq-item__trigger"
+                data-faq-trigger
+                aria-expanded="false"
+                aria-controls={`faq-panel-${i}`}
+                id={`faq-trigger-${i}`}
+              >
+                <span>{f.question}</span>
+                <span class="faq-item__icon" aria-hidden="true" />
+              </button>
+            </h3>
+            <div
+              class="faq-item__panel"
+              id={`faq-panel-${i}`}
+              role="region"
+              aria-labelledby={`faq-trigger-${i}`}
+              data-faq-panel
+            >
+              <div class="faq-item__panel-inner">
+                <p class="faq-item__answer">{f.answer}</p>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+</section>
+
+<script>
+  const triggers = document.querySelectorAll('[data-faq-trigger]');
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const panelId = trigger.getAttribute('aria-controls');
+      const panel = panelId ? document.getElementById(panelId) : null;
+      if (!panel) return;
+
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+      trigger.setAttribute('aria-expanded', String(!isOpen));
+      panel.classList.toggle('is-open', !isOpen);
+    });
+  });
+</script>
+
+<style>
+  .faq-list {
+    margin-top: 1.25rem;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .faq-item__heading {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  .faq-item__trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 0;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .faq-item__icon {
+    position: relative;
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+  }
+
+  .faq-item__icon::before,
+  .faq-item__icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: currentColor;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease;
+  }
+
+  .faq-item__icon::before {
+    width: 14px;
+    height: 2px;
+  }
+
+  .faq-item__icon::after {
+    width: 2px;
+    height: 14px;
+  }
+
+  .faq-item__trigger[aria-expanded='true'] .faq-item__icon::after {
+    transform: translate(-50%, -50%) scaleY(0);
+  }
+
+  .faq-item__panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    transition: grid-template-rows 0.3s ease;
+  }
+
+  .faq-item__panel.is-open {
+    grid-template-rows: 1fr;
+  }
+
+  .faq-item__panel-inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .faq-item__answer {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    opacity: 0.92;
+    padding-bottom: 1.1rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-item__panel {
+      transition: none;
+    }
+
+    .faq-item__icon::before,
+    .faq-item__icon::after {
+      transition: none;
+    }
+  }
+</style>

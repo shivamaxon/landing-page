@@ -3,10 +3,12 @@ const STORAGE_KEY = 'riviera_lead_captured';
 // ---------------------------------------------------------------------------
 // Popup timing — tune here, nowhere else.
 // Retuned per marketing review: scroll-depth triggers removed entirely,
-// timer only, fires once at 30s, one re-fire at 90s (30s + 60s) if still
-// dismissed, then stops for the session (no indefinite looping).
+// timer only. First fire is now near-instant (3s — not 0, so the hero still
+// gets a paint frame and Google's intrusive-interstitial mobile-search
+// penalty isn't triggered by a truly 0ms popup), one re-fire at +60s if
+// still dismissed, then stops for the session (no indefinite looping).
 // ---------------------------------------------------------------------------
-const POPUP_FIRST_DELAY_MS = 30000; // first fire, 30s after load
+const POPUP_FIRST_DELAY_MS = 3000; // first fire, 3s after load (near-instant)
 const POPUP_REFIRE_DELAY_MS = 60000; // single re-fire, 60s after the first, then stop
 
 function hasCaptured() {

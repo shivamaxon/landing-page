@@ -9,6 +9,12 @@
 // two same-weight headlines stacked back to back, competing for attention.
 // Now the scarcity line is a small lead-in statement and the 20-plots line
 // is the section's one dominant headline.
+//
+// SEO copy pass: marketing's new body copy re-opens with the same "1%"
+// stat as its first sentence, so the standalone lead-in paragraph (which
+// said the same thing above the headline) was dropped to avoid repeating
+// it twice back to back — an interpretation call, not an explicit
+// instruction; see CLAUDE.md.
 const facts = [
   { value: '20', label: 'River-Touching Villa Plots' },
   { value: 'OC Applied', label: 'Status' },
@@ -19,17 +25,17 @@ const facts = [
 <section class="section section--forest-deep" id="overview">
   <div class="section-inner" style="text-align: center;">
     <p class="eyebrow reveal">Riviera Overview</p>
-    <p class="overview-lead-in reveal">
-      Only <em>1%</em> of India's land is riverfront.
-    </p>
     <h2 class="section-title reveal reveal-delay-1 overview-headline">
-      20 Exclusive River-Touching Plots. That's All There Ever Will Be.
+      20 Exclusive River-Touching Villa Plots in Sindhudurg. That's All There
+      Ever Will Be.
     </h2>
     <p class="section-body reveal reveal-delay-2 overview-body">
-      Rivers belong to everyone. Riverfront doesn't. Shoreline is finite,
-      regulations are tighter, and no one is creating more riverfront land.
-      These 20 plots are among the last opportunities to own an
-      uninterrupted stretch of river.
+      Only <em>1%</em> of India's land is riverfront. Rivers belong to
+      everyone — riverfront doesn't. Shoreline is finite, coastal regulations
+      are tighter each year, and no one is creating more riverfront land.
+      These 20 residential plots in Vagade, Sindhudurg are among the last
+      opportunities to own an uninterrupted stretch of the Gad River, where
+      riverside living isn't a view from the balcony — it's your backyard.
     </p>
 
     <div class="stat-grid overview-facts">
@@ -46,22 +52,6 @@ const facts = [
 </section>
 
 <style>
-  /* Small, quiet lead-in — no longer competing with the main headline for
-     visual weight. */
-  .overview-lead-in {
-    font-family: var(--font-display);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: clamp(0.95rem, 3.2vw, 1.15rem);
-    opacity: 0.85;
-  }
-
-  .overview-lead-in em {
-    font-style: normal;
-    color: var(--brand-aqua-light);
-  }
-
   /* The one dominant headline in this section. */
   .overview-headline {
     margin-top: 0.6rem;
@@ -73,6 +63,11 @@ const facts = [
     max-width: 46ch;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .overview-body em {
+    font-style: normal;
+    color: var(--brand-aqua-light);
   }
 
   /* More room to breathe before the fact strip, and a bigger gap between

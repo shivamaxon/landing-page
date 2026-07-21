@@ -1,15 +1,26 @@
 ---
+import { getImage } from 'astro:assets';
 import '../styles/global.css';
+import hero1 from '../assets/images/Hero1.png';
 
 interface Props {
   title?: string;
   description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
 }
 
 const {
-  title = 'The Riviera by Axon Developers | India\'s Rarest Riverfront Address',
-  description = 'The Riviera — riverfront villa plots by Axon Developers.',
+  title = "The Riviera by Axon Developers | Riverfront Villa Plots, Sindhudurg",
+  description = "The Riviera by Axon Developers — 20 river-touching villa plots in Vagade, Sindhudurg, on the Gad River. Own rare riverfront land on NH-66 near Goa. Enquire now.",
+  ogTitle = title,
+  ogDescription = description,
 } = Astro.props;
+
+// og:image needs a plain static URL (social crawlers don't read srcset), so
+// it's generated once here via getImage() rather than through <Picture>.
+const ogImage = await getImage({ src: hero1, width: 1200, format: 'jpg' });
+const canonicalUrl = new URL(Astro.url.pathname, Astro.url.origin).href;
 ---
 
 <!doctype html>
@@ -19,12 +30,20 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
 
-    <!-- Open Graph (placeholders — final copy/image to come later) -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content="/images/og-placeholder.jpg" />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:image" content={new URL(ogImage.src, Astro.url.origin).href} />
+    <meta property="og:url" content={canonicalUrl} />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={ogDescription} />
+    <meta name="twitter:image" content={new URL(ogImage.src, Astro.url.origin).href} />
 
     <!-- Self-hosted font preloads -->
     <link

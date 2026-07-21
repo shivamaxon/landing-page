@@ -13,7 +13,7 @@ const heroImages = [hero1, hero2, hero3];
       heroImages.map((img, i) => (
         <Picture
           src={img}
-          alt="The Riviera — riverfront villa plots on the Gad River"
+          alt="The Riviera — riverfront villa plots on the Gad River in Vagade, Sindhudurg"
           widths={[400, 800, 1200, 1920]}
           sizes="100vw"
           formats={['avif', 'webp']}
@@ -30,7 +30,10 @@ const heroImages = [hero1, hero2, hero3];
   <div class="hero__overlay"></div>
   <div class="hero__content">
     <h1 class="hero__title">The Riviera</h1>
-    <p class="hero__tagline">India's Most Exclusive River Side Living</p>
+    <h2 class="hero__tagline">
+      Riverfront Villa Plots in Sindhudurg — India's Most Exclusive Riverside
+      Living
+    </h2>
     <div class="hero__actions">
       <button type="button" class="btn btn-primary" data-gate-trigger data-intent="enquiry">
         Enquire Now
@@ -144,7 +147,7 @@ const heroImages = [hero1, hero2, hero3];
   }
 
   .hero__tagline {
-    margin-top: 0.75rem;
+    margin: 0.75rem 0 0;
     font-family: var(--font-body);
     font-weight: 300;
     font-size: clamp(1rem, 4vw, 1.25rem);

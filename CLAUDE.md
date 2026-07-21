@@ -11,10 +11,17 @@
 - **Purpose:** lead capture from Meta ad traffic. Fast mobile load is priority #1 —
   ad traffic has a high bounce risk on slow pages.
 - **Tagline (locked, brand-wide):** "India's Rarest Riverfront Address."
-- **Hero tagline (page-specific, current):** "India's Most Exclusive River Side
-  Living" — set by the July 2026 marketing revision pass, sits under the "THE
-  RIVIERA" title on the hero only. The brand-wide tagline above is unchanged and
-  still governs elsewhere (e.g. `<title>`/meta description in `Layout.astro`).
+- **Hero subhead (page-specific, current):** "Riverfront Villa Plots in
+  Sindhudurg — India's Most Exclusive Riverside Living" — the July 2026 SEO
+  copy pass (see §14) extended the prior "India's Most Exclusive River Side
+  Living" hero tagline with an SEO-keyword prefix and promoted the element
+  from a `<p>` to an `<h2>` (semantic subhead, directly under the hero's
+  `<h1>`). Sits under the "THE RIVIERA" title on the hero only. **The
+  `<title>`/meta description no longer read the brand-wide tagline
+  verbatim** — the July 2026 SEO pass replaced them with SEO-specific copy
+  (see §14); `Layout.astro`'s default `title`/`description` props and
+  `index.astro`'s `ogTitle`/`ogDescription` overrides are now the source of
+  truth for those strings.
 - **Source of truth for all copy/claims:** `docs/brand-guidelines.md`. A second
   reference doc, `docs/reference-site-notes.md`, captures structural/mechanical
   patterns (section order, form mechanics, popup timing) borrowed from a competitor
@@ -54,13 +61,17 @@
     QuickContactStack.astro    — fixed right-side stack: WhatsApp + Call (see §4)
     StickyCta.astro            — mobile-only fixed bottom bar (2 buttons, see §4)
     /sections   — one file per page section, see §4 for order/behavior
+                   (includes Faq.astro, new in the July 2026 SEO pass — see §14)
   /data
     country-codes.js       — ~230-entry country calling-code list for the modal's dropdown
-    gallery-images.js       — single source of truth for the 9 lifestyle-gallery photos;
+    gallery-images.js       — single source of truth for the 9 lifestyle-gallery photos
+                               (alts rewritten to SEO copy in the July 2026 pass, see §14);
                                imported by both LifestyleGallery.astro (grid tiles) and
                                Lightbox.astro (full-size slides) so order can't drift
   /layouts
-    Layout.astro           — <head>, meta/OG tags, global.css import, font preloads
+    Layout.astro           — <head>, meta/OG/Twitter-card tags, canonical link,
+                              global.css import, font preloads (see §14 for the
+                              July 2026 SEO meta rewrite)
   /pages
     index.astro             — assembles the whole page; the single source of section order
     thank-you.astro           — post-submit redirect target for Google Ads conversion
@@ -220,14 +231,19 @@ Footer) is retired:
    title"; see §11.**
 4. **LocationConnectivity** (`#location`) — road image banner → "The Place"
    heading/body (Gad-river framing) → a **4-item "Key Distances" fact strip**
-   in this exact order: 25 min to beaches / 50 min to Sindhudurg Airport / 60 min
-   to Goa International Airport (MOPA) / 40 min to Sindhudurg Fort. **"On NH-66"
+   in this exact order: 25 min to beaches / 50 min to Sindhudurg Airport / 70 min
+   to Goa International Airport (MOPA) / 40 min to Sindhudurg Fort. **The Goa/MOPA
+   figure was updated from 60 to 70 min in the July 2026 SEO copy pass — this is
+   the only place on the site the figure appears (also repeated verbatim in the
+   FAQ answer and its JSON-LD, see §14), so there was no other occurrence to
+   change.** **"On NH-66"
    was dropped as its own box in the design-review pass** — the section's own
    title already states the NH-66 framing, so it was redundant as a 5th box; a
    clean 2×2 grid on mobile, 4-across from 900px. `.stat-card__label` also
    gained `overflow-wrap: break-word; hyphens: auto;` (global, applies to every
    stat card) so the long MOPA label wraps cleanly instead of risking clipping
-   at 375px. **The MOPA/60-min figure and the "Sindhudurg Airport" naming are
+   at 375px. **The MOPA/70-min figure (60 min prior to the July 2026 SEO pass)
+   and the "Sindhudurg Airport" naming are
    not present in docs/brand-guidelines.md or in the brochure** — supplied
    directly, verbatim, by marketing; treated as authoritative per their
    instruction, but flagged since they aren't independently corroborated (see
@@ -277,19 +293,32 @@ Footer) is retired:
    `pointer-events: auto` on `.gate__overlay` and its buttons. **Re-verify in a
    real desktop browser; if it still doesn't work, the cause is elsewhere
    (possibly a stacking-context issue from a section higher up the page).**
-9. **AboutDeveloper** (new) — Axon Developers' logo centered at the top, then the
-   exact "cutting edge of global experiences... Integrated Tourism Townships"
-   copy supplied by marketing. Replaces the old AxonPromise section (the 01–04
-   Design → Approvals → Leasing → Resale Support process grid, and the "61
-   cities in 12 states" line) entirely — that content is retired, not merged in.
-10. **BookSiteVisit** (`#site-visit`) — unchanged; compact CTA prompt, opens
-    modal with `intent="sitevisit"`.
-11. **FinalCta** (`#enquire`) — unchanged; compact CTA prompt, opens modal with
-    `intent="enquiry"`.
-12. **Footer** — real Riviera logo, brand line, a trimmed disclaimer (see
-    below), a new **"Disclaimer & Privacy Policy" line** (truncated text +
-    "Read More" linking to `/privacy-policy`), copyright line. **No RERA
-    reference of any kind — unchanged, still a hard constraint.**
+9. **AboutDeveloper** (new) — Axon Developers' logo centered at the top, an
+   `<h2>` "About Axon Developers" (added in the July 2026 SEO pass — the
+   section previously had no heading of its own, just an eyebrow), then the
+   "cutting edge of global living experiences... Integrated Tourism Townships
+   ... The Riviera in Vagade, Sindhudurg" copy (rewritten into one paragraph
+   in the SEO pass, see §14; was two paragraphs before). Replaces the old
+   AxonPromise section (the 01–04 Design → Approvals → Leasing → Resale
+   Support process grid, and the "61 cities in 12 states" line) entirely —
+   that content is retired, not merged in.
+10. **BookSiteVisit** (`#site-visit`) — compact CTA prompt, opens modal with
+    `intent="sitevisit"`. Heading retitled "Book a Site Visit to The Riviera,
+    Sindhudurg" in the SEO pass (§14); body unchanged.
+11. **FinalCta** (`#enquire`) — compact CTA prompt, opens modal with
+    `intent="enquiry"`. Body retitled in the SEO pass (§14) to reference
+    "owning a riverfront villa plot in Sindhudurg"; heading unchanged.
+12. **Faq** (new, `#faq`) — added in the July 2026 SEO copy pass, sits between
+    FinalCta and Footer. See §14 for the full spec: a 5-question vanilla-JS
+    accordion (keyboard-accessible, `prefers-reduced-motion`-aware) plus a
+    same-page `FAQPage` JSON-LD block. **This is the only place pricing (300
+    sq yard plots, ₹16,500/sq yard) appears anywhere on the site** — do not
+    let it leak into any other section.
+13. **Footer** — real Riviera logo, a rewritten brand line (see §14; now
+    mentions Kankavli), a trimmed disclaimer (see below), a
+    **"Disclaimer & Privacy Policy" line** (truncated text + "Read More"
+    linking to `/privacy-policy`), copyright line. **No RERA reference of any
+    kind — unchanged, still a hard constraint.**
 
 **Sections removed entirely this pass** (files deleted, not just unlinked):
 `ScarcityHook.astro`, `UspGrid.astro` (both folded into `RivieraOverview.astro`),
@@ -544,26 +573,42 @@ deployed behind AWS CloudFront — no third-party geolocation call) should be re
 in and mapped to a dial code. The dropdown still contains every country; detection
 only changes the *default* selection.
 
-### Popup behavior (retuned this pass — scroll triggers removed)
+### Popup behavior (retuned this pass — scroll triggers removed; timing
+retuned again in the July 2026 "near-instant popup" pass)
 
 Named constants at the top of `gating.js`:
 ```js
-const POPUP_FIRST_DELAY_MS = 30000;   // first fire, 30s after load
+const POPUP_FIRST_DELAY_MS = 3000;    // first fire, 3s after load (near-instant)
 const POPUP_REFIRE_DELAY_MS = 60000;  // single re-fire, 60s after the first
 ```
 - **Scroll-depth triggers are removed entirely** (the old `SCROLL_TRIGGER_THRESHOLDS`
   constant, the `onScroll` handler, and the `scroll` listener are all gone). Timer
   is now the only trigger mechanism.
-- Timer: fires once at 30s via `setTimeout`. If the user hasn't converted, it
-  re-fires **exactly once more** at +60s (i.e. 90s after page load), then stops
-  scheduling further fires for the session — this is a deliberate change from the
-  previous behavior (which kept re-firing every 45s indefinitely).
+- Timer: fires once at **3s** via `setTimeout`. If the user hasn't converted, it
+  re-fires **exactly once more** at +60s (i.e. ~63s after page load), then stops
+  scheduling further fires for the session.
+- **Why 3s and not 0s:** deliberately not instant — a 0ms popup risks Google's
+  intrusive-interstitial mobile-search ranking penalty, and 3s still gives the
+  hero image a paint frame before the modal covers it. If a truly instant
+  popup is ever wanted, it's the same constant (`POPUP_FIRST_DELAY_MS`) — no
+  other code path to touch.
+- This is a deliberate change from the *previous* behavior (30s first-fire /
+  90s total before stopping), which was itself a deliberate change from the
+  original (which kept re-firing every 45s indefinitely) — see the retune
+  history below. Don't assume "faster popup" implies "more aggressive
+  overall": the re-fire is still capped at exactly one, same as before.
 - **Stops completely and permanently** the moment `sessionStorage.getItem
   ('riviera_lead_captured') === 'true'` — checked both inside the timer callback
   and inside the submit handler (`stopPopups()` clears the pending timeout).
-- These were previously 15s first-fire / 45s indefinite repeat / 50%+90% scroll
-  (and before that, 6s/6s/25-50-75-100% scroll) — each retune was deliberate and
-  progressively less aggressive. Don't re-tighten these without being asked; if
+- **Full retune history** (each step deliberate, oldest first): 6s first-fire /
+  6s indefinite repeat / 25-50-75-100% scroll → 15s first-fire / 45s indefinite
+  repeat / 50%+90% scroll → 30s first-fire / single 60s re-fire, no scroll
+  triggers → **3s first-fire / single 60s re-fire, no scroll triggers** (this
+  pass, explicit instruction: fire "almost immediately"). Note the first-fire
+  delay's trend reversed this pass (30s → 3s, faster, not slower) — that's a
+  deliberate instruction, not a mistake; the re-fire cap (exactly once) and
+  the no-scroll-triggers rule are unchanged and still the "less aggressive"
+  guardrails. Don't re-tighten or re-loosen further without being asked; if
   asked to tune again, only touch the two named constants above, and confirm
   with the user whether scroll triggers should come back before adding them.
 
@@ -836,11 +881,13 @@ number as current.**
   (`console.log`s and resolves). Every entry point passes an `intent` field
   (`enquiry | siteplan | brochure | sitevisit` — `floorplan` retired this pass)
   so the eventual CRM integration can track source.
-- Popup aggressiveness has been dialed back twice now (6s/6s/25-50-75-100% scroll
-  → 15s/45s/50-90% scroll → **30s/90s, timer-only, no scroll triggers**, this
-  pass). It must still stop permanently after submit. If asked to retune again,
-  edit only the two named constants in `gating.js`, and check with the user
-  before reintroducing scroll triggers.
+- Popup timing has been retuned four times now: 6s/6s/25-50-75-100% scroll →
+  15s/45s/50-90% scroll → 30s/90s timer-only, no scroll triggers → **3s first
+  fire / single 60s re-fire, timer-only, no scroll triggers** (July 2026 pass,
+  explicit "fire almost immediately" instruction — see §4, "Popup behavior").
+  It must still stop permanently after submit. If asked to retune again, edit
+  only the two named constants in `gating.js`, and check with the user before
+  reintroducing scroll triggers.
 - Form fields are fixed: Name, Email, Country code (dropdown, default-detected,
   currently always +91), Phone. Plus a required consent checkbox with the exact
   text in §4 — **now pre-ticked by default** (this pass; user can untick). Do not
@@ -896,9 +943,10 @@ number as current.**
   highest-priority item to confirm** — "OC Applied" (Occupancy Certificate
   applied for) and "freehold title" describe different, non-overlapping legal
   states, and neither matches "all approvals in place." See §11.
-- **The "60 min to Goa International Airport (MOPA)" and "50 min to Sindhudurg
-  Airport" figures are unconfirmed against any source document** — same
-  situation as OC Applied. See §11.
+- **The "70 min to Goa International Airport (MOPA)" (60 min prior to the July
+  2026 SEO pass — updated per marketing's literal instruction, not a source
+  document) and "50 min to Sindhudurg Airport" figures are unconfirmed against
+  any source document** — same situation as OC Applied. See §11.
 - **Country-code detection is unimplemented**, just prepped — see §4. Needs the
   actual CloudFront-Viewer-Country wiring once deployed (§8, item 5).
 - **The "About the Developer" section's placement (item 9, after Site Plan) and
@@ -1046,11 +1094,13 @@ copy** — flagged here for the user to decide. Ranked by materiality:
    with "OC Applied."**
 2. **MOPA/Sindhudurg-Airport distance figures are not corroborated anywhere.**
    Brand-guidelines.md and the brochure (page 13) both give only a generic "50
-   mins from Airport" (no name, no MOPA, no 60-min Goa figure). The "60 min to
-   Goa International Airport (MOPA)" and "50 min to Sindhudurg Airport" (as a
-   named, distinct airport) used on the site this pass came directly from
-   marketing's literal instruction, not from either source document. Recommend
-   double-confirming both before the next content review.
+   mins from Airport" (no name, no MOPA, no distinct Goa figure). The "70 min to
+   Goa International Airport (MOPA)" (60 min prior to the July 2026 SEO copy
+   pass, §14 — updated per marketing's literal instruction, not a new source
+   document) and "50 min to Sindhudurg Airport" (as a named, distinct airport)
+   used on the site came directly from marketing's literal instruction, not
+   from either source document. Recommend double-confirming both before the
+   next content review.
 3. **Underwater museum/scuba centre figure is combined on-site but split in the
    brochure.** Brochure page 20: "₹46.9 Cr. is sanctioned for an underwater
    museum and artificial reef" plus a separately-figured "World-class scuba
@@ -1191,3 +1241,194 @@ component/logic, and the "Location" nav link fixed to land on the map.
   tool was available in this environment either — same limitation as §12),
   a full Lighthouse re-run, and re-confirmation of the §11 brochure
   discrepancies (this pass touched no copy/claims covered by that report).
+
+## 14. VERIFICATION DONE (SEO copy + FAQ pass, July 2026)
+
+A front-end-only pass applying marketing-supplied SEO meta tags, heading/copy
+rewrites, and a new FAQ section with structured data. No backend, no visual
+redesign — same section shells and CSS classes were reused wherever the copy
+fit inside them.
+
+### Meta tags (`Layout.astro`)
+
+- Default `title` / `description` rewritten to the SEO strings (see the task
+  brief in this pass's history for exact wording); both are now keyword-led
+  ("riverfront villa plots," "Vagade, Sindhudurg," "Gad River," "NH-66") rather
+  than the brand-wide tagline verbatim — see §1 for how this relates to the
+  still-locked brand tagline.
+- Added `ogTitle`/`ogDescription` props (default to `title`/`description`) so
+  `index.astro` can supply distinct, slightly different OG copy from the
+  `<title>`/meta description, per marketing's spec. `thank-you.astro` and
+  `privacy-policy.astro` don't pass these, so their OG tags fall back to
+  their own existing `title` prop — confirmed via build output.
+- Added `<link rel="canonical">`, `og:url`, and full Twitter card tags
+  (`summary_large_image`, title/description/image).
+- `og:image`/`twitter:image` are generated from `Hero1.png` via `getImage()`
+  (1200px, jpg) — the first time this project has needed a plain static
+  image URL rather than a `<Picture>`/`<Image>` element, since social
+  crawlers don't read `srcset`.
+- **`og:url`/canonical currently resolve to `http://localhost:4321/`** — this
+  project has no `site` set in `astro.config.mjs` and no domain yet (§8, item
+  6, still pending). **Add `site: 'https://<final-domain>'` to
+  `astro.config.mjs` once the domain is live**, or these tags will keep
+  pointing at a placeholder in production. Flagging this rather than
+  guessing a domain.
+
+### Heading structure
+
+- Exactly one `<h1>` on `index.astro` (Hero's "The Riviera") — confirmed via
+  `grep`. `thank-you.astro` and `privacy-policy.astro` each keep their own
+  separate `<h1>` (they're different pages, not sections of the same
+  document, so this doesn't violate the one-`<h1>`-per-page rule).
+- Hero's tagline was promoted from a `<p>` to an `<h2>` (see §1) — it's the
+  page's first subhead, immediately after the `<h1>`.
+- Every other section's existing `<h2 class="section-title">` pattern was
+  reused as-is; only text content changed (see §4 for the per-section
+  wording). **`AboutDeveloper.astro` previously had no heading at all** (just
+  an `.eyebrow` line) — added its `<h2>`"About Axon Developers" this pass,
+  the section's first.
+- New `Faq.astro` section: one `<h2>` (section heading) + one `<h3>` per
+  question (`.faq-item__heading`), giving a clean h1→h2→h3 order for the
+  visible page flow. (`LeadModal.astro`'s own `<h2>` sits after the FAQ's
+  `<h3>`s in raw DOM order, but it's a hidden-by-default dialog outside the
+  page's reading flow, not a document-order heading violation in practice —
+  this is a pre-existing pattern, not something this pass introduced.)
+
+### Copy — see §4 for the finished wording per section
+
+RivieraOverview, LocationConnectivity ("The Place"), LifestyleDetail,
+LifestyleGallery, GrowthThesis, SitePlanGated, AboutDeveloper, BookSiteVisit,
+FinalCta, and the Footer line were all updated to marketing's supplied SEO
+copy verbatim. **Place names were kept exactly as given per section — Vagade
+(the site itself), Kankavli, and Kudal (nearby towns/landmarks) are used
+deliberately in different sections for SEO reach and were NOT normalized to
+one name.** Specifically: Vagade appears in the hero alt text, RivieraOverview
+body, LocationConnectivity body, LifestyleDetail card copy, SitePlanGated
+heading, AboutDeveloper body, and the FAQ's location answer; Kankavli appears
+in the LifestyleGallery heading, the map alt text, and the footer line; Kudal
+appears only inside "Kudal Railway Station" in the map alt text (unchanged
+wording from the prior pass).
+
+- **RivieraOverview interpretation call:** marketing's new body copy re-opens
+  with "Only 1% of India's land is riverfront" — the same stat the prior
+  design-review pass had pulled out into a small standalone `.overview-lead-in`
+  paragraph above the headline. Rather than show that stat twice back-to-back,
+  the standalone lead-in paragraph (and its now-unused CSS) was removed; the
+  stat now only appears once, as the body's opening sentence. Flagging as an
+  interpretation, not an explicit instruction — revisit if marketing wants the
+  stat visually separated from the body again.
+- **Goa/MOPA distance figure changed from 60 to 70 minutes** in
+  `LocationConnectivity.astro`'s `keyDistances` array — the only place this
+  figure exists on the page besides the FAQ answer/JSON-LD (which use the new
+  70-min figure directly, so there was nothing else to reconcile). Confirmed
+  via `grep -rn "60 min"` returning zero matches post-change.
+- **Gallery alt-text mapping (flag for marketing to confirm):** marketing
+  supplied exactly 8 SEO alt texts for what is a 9-image gallery
+  (`gallery-images.js`). Matched by content to 8 of the 9 images, in the
+  order marketing listed them; the 9th image (`couple looking at river.png`,
+  the "couple looking out at the river" tile) has no corresponding SEO alt
+  and keeps its prior descriptive alt text unchanged. Final mapping applied:
+  1. `villa view with swimming pool.png` → "Villa exterior with private pool
+     — riverfront plots in Sindhudurg"
+  2. `sitting along the swimming pool.png` → "Poolside seating, The Riviera
+     riverfront villa"
+  3. `boat along with dock.png` → "Private boat dock on the Gad River, The
+     Riviera"
+  4. `boat in river sunset.png` → "Gad River at sunset — riverfront living
+     in Konkan"
+  5. `couple looking at river.png` → **unchanged** ("Couple looking out at
+     the river") — no SEO alt supplied for this image; confirm with
+     marketing whether one is wanted.
+  6. `walking along the garden.png` → "Riverside villa garden walk,
+     Sindhudurg"
+  7. `river view from living room.png` → "River-view living room, The
+     Riviera villa plots"
+  8. `sunset view of villa lined up.png` → "Riverfront villas at sunset,
+     Vagade, Sindhudurg"
+  9. `villa lined up against the river.png` → "Villas along the Gad River
+     riverfront walkway"
+- **Location map alt text** updated to marketing's exact wording ("Location
+  map of The Riviera, Kankavli, Sindhudurg — beaches, Kudal Railway Station,
+  airport and NH-66 route") in both places it's duplicated:
+  `LocationConnectivity.astro`'s trigger button and `Lightbox.astro`'s
+  slide-10 data — kept in sync manually since, unlike the 9 gallery images,
+  the map isn't pulled from a single shared data module.
+
+### FAQ section (`Faq.astro`, new)
+
+- Added as item 12 in the section order, between FinalCta and Footer (§4).
+- 5 Q&As, exactly as supplied by marketing, held in one `faqs` array that
+  feeds both the visible accordion and the JSON-LD below it — single source
+  of truth, can't drift apart.
+- **Accordion:** vanilla JS (inline `<script>` in `Faq.astro`, following the
+  same per-component-inline-script pattern as `Hero.astro`'s rotation and
+  `thank-you.astro`'s redirect script — not one of the shared `src/scripts/*`
+  modules, since this behavior is local to one section). Each question is a
+  real `<button>` inside an `<h3>` (native keyboard support — Enter/Space
+  toggle, Tab moves between triggers); panels expand/collapse via a CSS
+  `grid-template-rows: 0fr → 1fr` transition (`transition: none` under
+  `prefers-reduced-motion: reduce`, confirmed in `Faq.astro`'s `<style>`
+  block). Multiple panels can be open at once — not specified either way by
+  marketing, chosen as the simpler behavior.
+- **Pricing (300 sq yard plots, ₹16,500/sq yard) appears ONLY in this FAQ's
+  third answer** — confirmed via `grep -o "16,500\|300 sq yard" dist/index.html`
+  returning exactly 2 matches each (the visible answer text + its identical
+  copy inside the FAQPage JSON-LD's `acceptedAnswer.text`, which is expected
+  and not a leak — it's the same on-page content, machine-readable).
+- **JSON-LD:** two blocks total on `index.astro`.
+  1. `FAQPage` (in `Faq.astro`, next to the visible accordion) — the same 5
+     Q&As, verbatim, wrapped in the standard `mainEntity`/`Question`/
+     `acceptedAnswer` shape.
+  2. `RealEstateListing` (in `index.astro`, after the `<Faq />` section) —
+     `name`, `description`, `url`, `address` (Vagade / Sindhudurg,
+     Maharashtra / IN), and `provider` (Axon Developers). Deliberately
+     minimal — no `offers`/price, no fields not already stated elsewhere on
+     the page, per the "do not invent fields" instruction. `url` has the same
+     `localhost:4321` caveat as `og:url` above until `site` is configured.
+  Both validated as parseable JSON via a Node `JSON.parse` check against the
+  built `dist/index.html` — see the verification list below.
+
+### Verification done
+
+- `npm run build` — **passes**, still 3 pages built (`/`, `/thank-you`,
+  `/privacy-policy`).
+- Exactly one `<h1>` on `index.astro`; heading order h1→h2→h3 confirmed via
+  `grep -o "<h[1-4][^>]*>"` against the built HTML (see caveat above re: the
+  lead modal's own `<h2>`).
+- `grep -rn "60 min" dist/index.html` — **zero matches**; `70 min` appears 3
+  times (the fact-strip card, the FAQ answer, and the FAQ JSON-LD) — confirmed
+  the figure changed everywhere it existed.
+- Both JSON-LD `<script type="application/ld+json">` blocks on `index.astro`
+  parsed successfully with `JSON.parse` (Node script against `dist/index.html`)
+  — `FAQPage` and `RealEstateListing`, one of each.
+- `grep -o "16,500\|300 sq yard" dist/index.html` — exactly 2 matches each
+  (visible FAQ answer + its JSON-LD copy), confirming pricing doesn't appear
+  anywhere else on the page.
+- Confirmed `og:title`/`og:description` fall back correctly to each page's own
+  `title` prop on `thank-you.astro` and `privacy-policy.astro` (neither passes
+  the new `ogTitle`/`ogDescription` props), via `grep` against their built
+  HTML.
+- **Not done this pass:** any real-browser/screenshot verification of the FAQ
+  accordion's open/close animation or focus behavior (no browser tool
+  available in this environment, same limitation noted in §12/§13); a full
+  Lighthouse re-run; re-confirmation of the §11 brochure-vs-guidelines
+  discrepancy report (this pass's copy changes don't introduce new
+  discrepancies beyond the MOPA distance figure, already covered above and in
+  §11 item 2's updated text).
+
+## 15. VERIFICATION DONE (popup near-instant retune, July 2026)
+
+Single-file change: `src/scripts/gating.js`'s `POPUP_FIRST_DELAY_MS` constant
+30000 → 3000. `POPUP_REFIRE_DELAY_MS` untouched (still 60000). No other logic
+touched — `stopPopups()`/`hasCaptured()` gating on
+`sessionStorage.riviera_lead_captured` is unchanged.
+
+- `npm run build` — **passes**, still 3 pages built.
+- Confirmed via `grep` that `POPUP_FIRST_DELAY_MS = 3000` and
+  `POPUP_REFIRE_DELAY_MS = 60000` are the only two timing constants in
+  `gating.js`, and that the comment above them was updated to explain the 3s
+  (not 0s) choice — see §4, "Popup behavior."
+- Not re-tested in a real browser (no browser/screenshot tool available in
+  this environment, same limitation as prior passes) — the change is a
+  single numeric constant feeding an existing, already-tested `setTimeout`
+  call, so a build pass plus the `grep` check above was judged sufficient.
